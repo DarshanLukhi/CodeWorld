@@ -1,0 +1,45 @@
+<div id="wrapper"  >
+    <app-header></app-header>
+    <div id="page-wrapper" >
+        <div class="container-fluid">
+          
+            <div class="center_div " >
+              <br>
+              <article class="card-body mx-auto" style="max-width: 350px;"> <br>  <br>  <br>
+                
+                <!--Login form start-->
+                <form #loginForm="ngForm" class="well " (ngSubmit)="loginUser(loginForm.value)"> 
+  
+                  <h3 class=" mt-3 text-center">Login</h3><br>
+
+  
+                  <div class="form-group input-group">
+                        <span class="input-group-addon"> <i class="fa fa-user"></i> </span>
+                        <input name="user_name" #user_name="ngModel" [(ngModel)]="model.username" class="form-control" placeholder="Username" type="text">
+                  </div> <!-- form-group// -->
+           
+                    
+              
+  
+                  <div class="form-group input-group">
+                    <span class="input-group-addon"> <i class="fa fa-lock"></i> </span>
+                    <input name="password" #password="ngModel" [(ngModel)]="model.password" class="form-control" placeholder="Enter password" type="password">
+                  </div> <!-- form-group// -->
+ 
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block"> Login  </button>
+                  </div> <!-- form-group// -->      
+  
+                  <p class="text-center" style="color:#fff">Have an not account? <a [routerLink]="['/registration']"><i class="fa fa-fw fa-edit"></i> Register</a> </p>   
+                  <p class="text-center"><a [routerLink]="['/forget-password']"><i class="fa fa-question-circle"></i> Forget Passsword?</a> </p>   
+  
+                </form>
+                <!--Login form end-->
+
+                <!--Error message-->
+              </article>
+            </div> <!-- card.// -->
+            <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>  
+        </div>
+    </div> 
+  </div>   

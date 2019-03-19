@@ -1,0 +1,152 @@
+  <!-- Navigation -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">CODE WORLD</a>
+    </div>
+    <!-- Top Menu Items -->
+    <ul class="nav navbar-right top-nav">
+
+<!--                       Header Message                        -->
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
+            <ul class="dropdown-menu message-dropdown">
+                <li class="message-preview">
+                    <a href="#">
+                        <div class="media">
+                            <span class="pull-left">
+                                <img class="media-object" src="http://placehold.it/50x50" alt="">
+                            </span>
+                            <div class="media-body">
+                                <h5 class="media-heading"><strong>{{first_name}} {{last_name}}</strong>
+                                </h5>
+                                <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                <p>Here write message</p>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="message-footer">
+                    <a href="#">Read All New Messages</a>
+                </li>
+            </ul>
+        </li>
+
+
+<!--                       Header Notofication                        -->
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
+            <ul class="dropdown-menu alert-dropdown">
+                <li>
+                    <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
+                </li>
+                <li>
+                    <a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
+                </li>
+                <li>
+                    <a href="#">Alert Name <span class="label label-success">Alert Badge</span></a>
+                </li>
+                <li>
+                    <a href="#">Alert Name <span class="label label-info">Alert Badge</span></a>
+                </li>
+                <li>
+                    <a href="#">Alert Name <span class="label label-warning">Alert Badge</span></a>
+                </li>
+                <li>
+                    <a href="#">Alert Name <span class="label label-danger">Alert Badge</span></a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#">View All</a>
+                </li>
+            </ul>
+        </li>
+
+<!--                       Header Profile      -->
+    
+        <li class="dropdown" *ngIf="login">
+            <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user">{{first_name}} {{last_name}}</i> <b class="caret"></b> </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a [routerLink]="['/profile']"><i class="fa fa-fw fa-user"></i> Profile</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/edit-profile']"><i class="fa fa-fw fa-user"></i>Edit Profile</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/my-question']"><i class="fa fa-question-circle"></i>My Questions</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/my-answer']"><i class="fa fa-comment-o"></i>My Answers</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a (click)="onLogout()"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                </li>
+            </ul>
+        </li>
+       <li class="dropdown" *ngIf="notLogin">
+           <a [routerLink]="['/login']"><i class="fa fa-sign-in"></i> Login</a>
+        </li>
+        <li class="dropdown" *ngIf="notLogin">
+            <a [routerLink]="['/registration']"><i class="glyphicon glyphicon-user"></i>Sign Up </a>
+        </li>
+
+    </ul>
+   
+
+
+
+    <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+    
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <div *ngIf="user" >
+
+
+            <ul class="nav navbar-nav side-nav">
+          
+                    <li class="active">
+                        <a [routerLink]="['/contests']"><i class="fa fa-fw fa-dashboard"></i> Contests</a>
+                    </li>
+                    
+                    <li>
+                        <a [routerLink]="['/practice']"><i class="fa fa-fw fa-table"></i> Practise</a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/discuss']"><i class="fa fa-fw fa-comments"></i> Discuss </a>
+                    </li>
+                   
+                </ul>
+        </div>
+        <div *ngIf="admin" >
+
+            <ul class="nav navbar-nav side-nav">
+                
+                    <li class="active">
+                        <a [routerLink]="['/admin/problems']"><i class="fa fa-fw fa-dashboard"></i>  Manage Problem</a>
+                    </li>
+                    
+    
+                    <li>
+                        <a [routerLink]="['/admin/contests']"><i class="fa fa-fw fa-bar-chart-o"></i> Manage Contest</a>
+                    </li>
+    
+                    <li>
+                        <a [routerLink]="['/admin/crud']"><i class="fa fa-fw fa-edit"></i> Manage User</a>
+                    </li>           
+                    <li>
+                        <a [routerLink]="['/discuss']"><i class="fa fa-fw fa-edit"></i> Manage Discuss</a>
+                    </li>               
+                </ul>   
+            </div>
+        </div>
+    <!-- /.navbar-collapse -->
+</nav>
+

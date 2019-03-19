@@ -1,0 +1,123 @@
+<div id="wrapper">
+    <app-header></app-header>
+    <div id="page-wrapper">
+        <div class="container-fluid">
+          
+            <div class="center_div " >
+              <br>
+              <article class="card-body mx-auto" style="max-width: 400px;">
+                
+                <!--Registration form start-->
+                <form #signUpForm="ngForm" class="well " (ngSubmit)="registerUser(signUpForm.value)">
+  
+                  <h3 class=" mt-3 text-center">Create Account</h3><br>
+  
+                  <div class="form-group input-group">
+                    <span class="input-group-addon"> <i class="fa fa-user"></i> </span>
+                    <input [(ngModel)]="userService.selectedUser.first_name" #first_name="ngModel" name="first_name" class="form-control" placeholder="First name" type="text" required>
+                  </div> <!-- form-group// -->
+                  <div *ngIf="signUpForm.submitted && !first_name.valid">
+                    <label *ngIf="first_name.errors.required" style="color:red">Firstname is required </label>
+                  </div>
+  
+                  <div class="form-group input-group">
+                      <span class="input-group-addon"> <i class="fa fa-user"></i> </span>
+                      <input [(ngModel)]="userService.selectedUser.last_name" #last_name="ngModel" name="last_name" class="form-control" placeholder="Last name" type="text"  [ngClass]="{'invalid-textbox' :signUpForm.submitted && !last_name.valid }" required>
+                    </div> <!-- form-group// -->
+                    <div *ngIf="signUpForm.submitted && !last_name.valid">
+                      <label *ngIf="last_name.errors.required" style="color:red">*Lastname is required </label>
+                    </div>
+  
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"> <i class="fa fa-user"></i> </span>
+                        <input [(ngModel)]="userService.selectedUser.user_name" #user_name="ngModel" name="user_name" class="form-control" tooltip="For username" placeholder="Username" type="text" required [pattern]="usernameRegex">
+                        <div class="input_info text-muted well well-sm">
+                          <ul>
+                            <li>Only contains a-z,A-z, underscore and dot. </li>
+                            <li> Underscore and dot can't be at the end or start of a username (e.g _username / username_ / .username / username.).</li>
+                            <li>Underscore and dot can't be next to each other (e.g user_.name).</li>
+                            <li> Underscore or dot can't be used multiple times in a row (e.g user__name / user..name).</li>
+                            <li>Number of characters must be between 6 to 15.</li>
+                          </ul>
+                        </div>
+                      </div> <!-- form-group// -->
+                      <div *ngIf="signUpForm.submitted && !user_name.valid">
+                        <label *ngIf="user_name.errors.required" style="color:red">*Username is required </label>
+                        <label *ngIf="user_name.errors.pattern" style="color:red">*Invalid username . </label>
+                      </div>
+
+                      <div class="form-group input-group">
+                          &nbsp;&nbsp;<input [(ngModel)]="userService.selectedUser.gender" #gender="ngModel" name="gender"  type="radio" value="Male" required> &nbsp; <label>Male</label>
+                          <input [(ngModel)]="userService.selectedUser.gender" #gender="ngModel" name="gender"  type="radio" value="Female" checked> &nbsp; <label>Female</label>
+                          <input [(ngModel)]="userService.selectedUser.gender" #gender="ngModel" name="gender"  type="radio" value="Other" checked> &nbsp; <label>Other</label>
+                      </div>
+  
+                  <div class="form-group input-group">
+                    <span class="input-group-addon"> <i class="fa fa-envelope"></i> </span>
+                    <input [(ngModel)]="userService.selectedUser.email_id" #email_id="ngModel" name="email_id" class="form-control" placeholder="Email address" type="email" required [pattern]="emailRegex">
+                    <div class="input_info text-muted well well-sm">
+                        <ul>
+                          <li>This will be used for our communication with you, so be careful in filling this. </li>
+                          <li>We will also send a verification code on this for any issue. </li>
+                        </ul>
+                    </div>
+                  </div> <!-- form-group// -->
+                  <div *ngIf="signUpForm.submitted && !email_id.valid">
+                    <label *ngIf="email_id.errors.required" style="color:red">*EmailID is required. </label>
+                    <label *ngIf="email_id.errors.pattern" style="color:red">*Invalid email address . </label>
+                  </div>
+                    
+                  <div class="form-group input-group">
+                    <span class="input-group-addon"> <i class="fa fa-phone"></i> </span>
+                    <input [(ngModel)]="userService.selectedUser.mobile_no" #mobile_no="ngModel" name="mobile_no" class="form-control" placeholder="Phone number" type="text" required pattern="^\d{10}$" >
+                    <div class="input_info text-muted well well-sm">
+                        <ul>
+                          <li>Don't enter country code.(+91 9876543210) </li>
+                          <li>Valid number Eg. 9876543210  </li>
+                        </ul>
+                    </div>
+                  </div> <!-- form-group// -->
+                  <div *ngIf="signUpForm.submitted && !mobile_no.valid">
+                    <label *ngIf="mobile_no.errors.required" style="color:red">*Mobile number is required. </label>
+                    <label *ngIf="mobile_no.errors.pattern" style="color:red">*Invalid phone number . </label>
+                  </div>
+               
+                  <div class="form-group input-group">
+                    <span class="input-group-addon"> <i class="fa fa-lock"></i> </span>
+                    <input [(ngModel)]="userService.selectedUser.password" #password="ngModel" name="password" class="form-control" placeholder="Create password" minlength="6" maxlength="20" type="password" required>
+                    <div class="input_info text-muted well well-sm">
+                        <ul>
+                          <li>Password must be atleast 6 characters long. </li>
+                          <li>Password should maximum 15 characters long. </li>
+                        </ul>
+                    </div>
+                  </div> <!-- form-group// -->
+                  <div *ngIf="signUpForm.submitted && !password.valid">
+                    <label *ngIf="password.errors.required" style="color:red">*Password is required </label>
+                    <label *ngIf="password.errors.minlength" style="color:red">*Password must be atleast 6 characters. </label>
+                    <label *ngIf="password.errors.maxlength" style="color:red">*Password must be atmost 20 characters.</label>
+                  </div>
+  
+                   <div class="form-group input-group">
+                    <span class="input-group-addon"> <i class="fa fa-lock"></i> </span>
+                    <input class="form-control" placeholder="Confirm password" [(ngModel)]="cpassword" type="password" name="cpassword">
+                  </div> 
+                  <!-- <div *ngIf="signUpForm.submitted && !cpassword.valid">
+                    <label *ngIf style="color:red">*Confirm password required </label>
+                  </div>  -->
+  
+                  <div class="form-group">
+                    <input type="submit"  [disabled]="!signUpForm.valid " class="btn btn-primary btn-block" value="Create Account "> 
+                  </div> <!-- form-group// -->      
+  
+                  <p class="text-center"><label>Have an account?</label> <a [routerLink]="['/login']"><i class="fa fa-fw fa-edit"></i> Login</a> </p>   
+  
+                </form>
+                <!--Registration form end-->
+              </article>
+            </div> <!-- card.// -->
+
+           
+        </div>
+    </div> 
+  </div>   

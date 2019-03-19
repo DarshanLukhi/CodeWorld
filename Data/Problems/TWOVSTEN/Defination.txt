@@ -1,0 +1,42 @@
+<head>
+	 <meta charset="UTF-8">
+	<title> Question 1 </title>
+</head>
+<p>Chef Two and Chef Ten are playing a game with a number X. In one turn, they can multiply X by 2. The goal of the game is to make X divisible by 10.</p>
+<p>Help the Chefs find the smallest number of turns necessary to win the game (it may be possible to win in zero turns) or determine that it is impossible.</p>
+
+<hr>
+
+<h3>Input:<br></h3>
+<li>The first line of the input contains a single integer T denoting the number of test cases. The description of T test cases follows.</li>
+<br><li>The first and only line of each test case contains a single integer denoting the initial value of X. </li>
+
+<hr>
+	
+<h3>Output:<br></h3>
+<p>For each test case, print a single line containing one integer — the minimum required number of turns or −1 if there is no way to win the game.</p>
+
+<hr>
+
+<h3>Constraints:<br></h3>
+<ul>
+	<li>1 ≤ T ≤ 1000</li>
+	<li>0 ≤ X ≤ 10<sup>9</sup></li>
+</ul>
+
+<hr>
+	
+<h3>Sample Input:<br></h3>
+<p>3</p>
+<p>10</p>
+<p>25</p>
+<p>1</p>
+
+
+<hr>
+	
+<h3>Sample Output:<br></h3>
+<p>0</p>	
+<p>1</p>	
+<p>-1</p>	
+

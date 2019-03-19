@@ -1,0 +1,153 @@
+<div id="wrapper">
+    <app-header></app-header>
+    <div id="page-wrapper">
+       <div class="container-fluid">
+          <article class="card-body mx-auto" style="max-width: 500px;">
+             <div class="row">
+                <div class="col-lg-12">
+                   <h3 class="page-header">
+                      Edit Profile
+                   </h3>
+                   <ol class="breadcrumb">
+                      <li>
+                         <i class="fa fa-dashboard"></i>  <a href="index.html">Home</a>
+                      </li>
+                      <li class="active">
+                         <i class="fa fa-table"></i> {{userDetails.first_name}} {{userDetails.last_name}}
+                      </li>
+                   </ol>
+                </div>
+             </div>
+
+             <!-- Nav tabs -->
+             <ul class="nav nav-tabs " role="tablist">
+                <li role="presentation" class="active"><a href="#personal" aria-controls="personal" role="tab" data-toggle="tab">Personal</a></li>
+                <li role="presentation"><a href="#communication" aria-controls="communication" role="tab" data-toggle="tab">Communication</a></li>
+                <li role="presentation"><a href="#privacy" aria-controls="privacy" role="tab" data-toggle="tab">Privacy</a></li>
+             </ul>
+
+             <!-- Tab panes -->
+             <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active table-responsive" id="personal">
+                   <form  #personalForm="ngForm" class="form well" (ngSubmit)="updatePersonal()" >
+                      <h3 class=" mt-3 text-center">Personal  Details</h3>
+                      <br>
+                      <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">Username</label>
+                        <div class="col-lg-9">
+                           <input class="form-control"  [(ngModel)]="model.user_name" type="text" name="user_name"  value="{{userDetails.user_name}}" disabled>
+                        </div>
+                     </div>
+                      <div class="form-group row">
+                         <label class="col-lg-3 col-form-label form-control-label">First name</label>
+                         <div class="col-lg-9">
+                            <input class="form-control" [(ngModel)]="model.first_name" type="text" name="first_name" value="{{userDetails.first_name}}" required>
+                         </div>
+                      </div>
+                      <div class="form-group row">
+                         <label class="col-lg-3 col-form-label form-control-label">Last name</label>
+                         <div class="col-lg-9">
+                            <input class="form-control"  [(ngModel)]="model.last_name" type="text" name="last_name" value="{{userDetails.last_name}}" required>
+                         </div>
+                      </div>
+                      <div class="form-group input-group">
+                           <label class="col-lg-3 col-form-label form-control-label">Gender</label>
+                           <div class="col-lg-9">  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;
+                            <input [(ngModel)]="model.gender"  name="gender"  type="radio" value="Male"  required>  Male
+                            <input [(ngModel)]="model.gender"  name="gender"  type="radio" value="Female" >  Female
+                            <input [(ngModel)]="model.gender"  name="gender"  type="radio" value="Other" >  Other
+                           </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">Birth Date</label>
+                        <div class="col-lg-9">
+                           <input class="form-control"  [(ngModel)]="model.birth_date" type="date" name="birth_date" value="1999-07-31" required>
+                        </div>
+                     </div>
+                      <div class="form-group row">
+                         <label class="col-lg-3 col-form-label form-control-label"></label>
+                         <div class="col-lg-9">
+                            <input type="submit" [disabled]="!personalForm.valid " class="btn btn-primary" value="Save">
+                         </div>
+                      </div>
+                   </form>
+                </div>
+             
+
+             
+               <div role="tabpanel" class="tab-pane fade table-responsive" id="communication">
+                  <form  #communicationForm="ngForm"  class="form well" (ngSubmit)="updateCommunication()" >
+                     <h3 class=" mt-3 text-center">Communication  Details</h3>
+                     <br>
+                     <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">Email ID</label>
+                        <div class="col-lg-9">
+                           <input class="form-control"  [(ngModel)]="model2.email_id"  name="email_id" type="email" value="{{userDetails.email_id}}" disabled>
+                        </div>
+                     </div>
+                     <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">City</label>
+                        <div class="col-lg-9">
+                           <input class="form-control"  [(ngModel)]="model2.city" type="text" name="city" value="{{userDetails.city}}">
+                        </div>
+                     </div>
+                     <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">State</label>
+                        <div class="col-lg-9">
+                           <input class="form-control"  [(ngModel)]="model2.state" type="text" name="state" value="{{userDetails.state}}">
+                        </div>
+                     </div>
+                     <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">Mobile No</label>
+                        <div class="col-lg-9">
+                           <input class="form-control"  [(ngModel)]="model2.mobile_no" type="text" name="mobile_no" value="{{userDetails.mobile_no}}" required pattern="^\d{10}$">
+                        </div>
+                     </div>
+                     <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label"></label>
+                        <div class="col-lg-9">
+                           <input type="submit" [disabled]="!communicationForm.valid " class="btn btn-primary" value="Save">
+                        </div>
+                     </div>
+                  </form>
+               </div>
+           
+
+            
+               <div role="tabpanel" class="tab-pane fade table-responsive" id="privacy">
+                  <form #privacyForm="ngForm" class="form well" (ngSubmit)="updatePrivacy()" >
+                     <h3 class=" mt-3 text-center">Privacy  Details</h3>
+                     <br>
+                     <div class="form-group row">
+                           <label class="col-lg-4 col-form-label form-control-label">Old Password</label>
+                           <div class="col-lg-8">
+                              <input class="form-control"  [(ngModel)]="model3.oldpassword" type="password" name="oldpassword" required>
+                           </div>
+                     </div>
+                     <div class="form-group row">
+                           <label class="col-lg-4 col-form-label form-control-label">New password</label>
+                           <div class="col-lg-8">
+                              <input class="form-control"  [(ngModel)]="model3.newpassword" minlength="6" maxlength="20" type="password" name="newpassword" required>
+                           </div>
+                     </div>
+                     <div class="form-group row">
+                           <label class="col-lg-4 col-form-label form-control-label">Confirm password</label>
+                           <div class="col-lg-8">
+                              <input class="form-control"  [(ngModel)]="model3.confirmpassword" type="password" name="confirmpassword" required>
+                           </div>
+                     </div>
+                     <div class="form-group row">
+                           <label class="col-lg-4 col-form-label form-control-label"></label>
+                           <div class="col-lg-8">
+                              <input type="submit" [disabled]="!privacyForm.valid " class="btn btn-primary" value="Save">
+                           </div>
+                        </div>
+                  </form>
+               </div>
+            </div>
+
+          </article>
+       </div>
+    </div>
+ </div>
+ 

@@ -1,0 +1,5 @@
+@-moz-document url-prefix() {
+    .mid{
+        padding-top:0px;
+    }
+  }

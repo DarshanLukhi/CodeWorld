@@ -1,0 +1,102 @@
+<div id="wrapper">
+    <app-header></app-header>
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Discuss <small>Section</small>
+                            
+                        </h1>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-9">
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-comments" ></i> QNA/questions
+                            </li>
+                        </ol>
+                    </div>
+                    <!--   Search   -->
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-9">
+                        <form role="form" #data="ngForm" (ngSubmit)="onSearch()" novalidate>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon" >Doubt ?</span>
+                                    <input type="text" class="form-control input" name="query" [(ngModel)]="query" placeholder="Search here..."  >
+                                    <!-- <span class="input-group-btn">
+                                        <button class="browse btn btn-warning input" type="submit" ><i class="glyphicon glyphicon-search" ></i> Search</button>
+                                    </span> -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="row">
+                <!--  Questions  -->
+                <div class="col-md-8 col-sm-8 col-xs-9">
+                    <div class="col-12">
+                        <div class="col-lg-6 col-sm-6 col-xs-12">
+                            <label><h4> All Questions </h4></label>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 col-xs-12 pull-right">
+                            <button class="browse btn btn-warning pull-right" type="submit" (click)="addQuestionButton()" > + Add Question</button>
+                        </div>
+                    </div>
+                    <div *ngIf="( q ) ?.length==0 ; else noquestion" class="col-xs-12">
+                        <p class="text-danger"> Sorry! No Question available currently. </p>
+                    </div>
+                    <ng-template #noquestion>
+                        <div *ngIf="( q | searchFilter: query ) ?.length==0" class="col-xs-12">
+                            <p class="text-danger"> Sorry! No Result Found. Check spelling or try different keyword. </p>
+                        </div>
+                    </ng-template>
+                    <div class="col-xs-12">
+                        <table>
+                            <tr *ngFor = "let i of q | searchFilter: query | paginate: { itemsPerPage: 4, currentPage: p }" #elem id={{i._id}}>
+                                <td>
+                                    <div class="well active">
+                                        <button *ngIf="admin" class="browse btn btn-danger pull-right" type="submit" (click)="deleteQuestion($event, i._id)"> <i class="fa fa-trash" ></i> </button>
+                                        <h4>
+                                            <a routerLink='/discuss/answer/{{ i._id }}' target="_blank" innerHTML="{{ i.question | highlight : query}}"> </a>
+                                        </h4>
+                                        <p> Question posted by <i><mark> <a routerLink='/profile/{{ i.userId }}' target="_blank" >{{ i.userId }}</a></mark></i>  on {{ i.timeStamp | date:'medium' }} </p>
+                                        <div class="breadcrumb">
+                                            <i class="fa fa-comment-o" ></i> {{ i.ansCount }} Answers
+                                            <i class="fa fa-eye" ></i> {{ i.viewCount }}  Views
+                                        </div>
+                                    </div>
+                                    <div><br></div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="text-center col-12">
+                            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                        </div>
+                    </div>
+                    
+                </div>
+                <!--  Post Question  -->
+                <div class="col-md-8 col-sm-8 col-xs-9">
+                    <form role="form" #data2="ngForm" (ngSubmit)="onPostQuestion()" novalidate>
+                        <div class="form-group">
+                            <h4><label> Your Question : </label></h4>
+                            <div *ngIf="isNotLogin">
+                                <p class="text-danger pull-right"> * Please <a [routerLink]="['/login']"><i class="fa fa-sign-in"></i> Login</a> in order to ask Question.</p>
+                            </div>
+                            <textarea class="form-control input" id="ques" name="ques" [(ngModel)]="ques" placeholder="Ask Question" rows="4" ></textarea>
+                            <br>
+                            <button class="browse btn btn-warning" type="submit"  > Post Question</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
