@@ -700,7 +700,7 @@ app.post('/compilecode' , function (req , res ) {
   
   if((lang === "C") || (lang === "C++"))
   {        
-      if(inputRadio == 'true')
+      if(inputRadio)
       {    
         var envData = { OS : "windows" , cmd : "g++" , options:{timeout : 5000}};
         compiler.compileCPPWithInput(envData , code ,input , function (data) {
@@ -716,8 +716,7 @@ app.post('/compilecode' , function (req , res ) {
    }
    else
    {
-
-     var envData = { OS : "windows" , cmd : "g++", options:{timeout : 10000}};	   
+     var envData = { OS : "windows" , cmd : "g++", options:{timeout : 5000}};	   
         compiler.compileCPP(envData , code , function (data) {
         if(data.error)
         {
@@ -811,24 +810,35 @@ app.post('/submitsolution' , function (req , res ) {
   var output = fs.readFileSync(dirpath + 'Output1.txt').toString();
   if((lang === "C") || (lang === "C++"))
   {         
-        var envData = { OS : "windows" , cmd : "g++" , options:{timeout : 5000}};
-        compiler.compileCPPWithInput(envData , code ,input , function (data) {
+        var envData = { OS : "windows" , options:{timeout : 5000}, pcode:pcode, ccode:ccode};
+        contestCompiler.compileCPPWithInput(envData , code , function(data){
+          
           if(data.error)
           {
-            res.status(422).send([data.error]);   		
-          }
+              res.status(200).send({ status : data.error});
+              console.log({ status : data.error});
+          }    	
           else
           {
-            res.send(data);
             
+            if(data.output.trim() == output)
+            {
+              res.status(200).send({ status : 'AC'});
+              console.log({ status : 'AC'});
+            }
+            else
+            {
+              res.status(200).send({ status : 'WA'});
+              console.log({ status : 'WA'});
+            }
           }
-        });
+        });            
   }
   if(lang === "Java")
   {
     var envData = { OS : "windows" };     
     console.log(true);
-    compiler.compileJavaWithInput( envData , code , input ,  function(data){
+    compiler.compileJavaWithInput( envData , code  ,  function(data){
 
       if(data.error)
       {

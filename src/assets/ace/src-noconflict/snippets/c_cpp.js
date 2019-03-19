@@ -102,9 +102,9 @@ snippet cin\n\
 ## Iteration\n\
 # for i \n\
 snippet fori\n\
-	for (int ${2:i} = 0; $2 < ${1:count}; $2${3:++}) {\n\
-		${4:/* code */}\n\
-	}${5}\n\
+	for (int ${1:i} = ${2:0}; $1 < ${3:count}; $1${4:++}) {\n\
+		${5:/* code */}\n\
+	}${6}\n\
 \n\
 # foreach\n\
 snippet fore\n\

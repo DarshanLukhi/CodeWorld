@@ -34,10 +34,15 @@ export class IdeComponent implements OnInit {
       $('#toggle').click(function() {
         $('#input').slideToggle();
       });
-
+      ace.require('ace/ext/language_tools');
       that.editor = ace.edit('editor');
       that.editor.setTheme('ace/theme/clouds');
       that.editor.session.setMode('ace/mode/c_cpp');
+      that.editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: true
+    });
     });
   }
 
