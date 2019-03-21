@@ -3,6 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DataService } from './../../services/data.service';
 import { Router, ActivatedRoute} from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { UserService } from 'src/app/services/user.service';
 
 declare var $: any;
 declare var ace: any;
@@ -26,13 +27,16 @@ export class CompileAndRunComponent implements OnInit {
   public editor;
   public theme = 'ace/theme/clouds';
   public buf;
+  public userId;
   public disable = false;
   constructor(private _dataService: DataService, private toastr: ToastrService,
-    private route: ActivatedRoute, private router: Router, private loadingBar: LoadingBarService) { }
+    private route: ActivatedRoute, private router: Router, private userService: UserService) { }
 
   ngOnInit() {
-    this.loadingBar.start();
     const that = this;
+    if ( this.userService.isLoggedIn() ) {
+      this.userId = this.userService.getUserPayload().user_name;
+  }
     $(document).ready(function() {
       $('#toggle').click(function() {
         $('#input').slideToggle();
@@ -56,10 +60,9 @@ export class CompileAndRunComponent implements OnInit {
       }
     );
 
-    this.loadingBar.complete();
 
   }
-  // <ngx-loading-bar></ngx-loading-bar>
+
   onLanguageChange() {
     if (this.lang === 'Python') {
       this.editor.session.setMode('ace/mode/python');
@@ -75,9 +78,7 @@ export class CompileAndRunComponent implements OnInit {
     this.editor.setTheme(this.theme);
   }
   onRunCode() {
-    this.loadingBar.start();
     this.disable = true;
-    // this.code = document.getElementsByClassName('ace_content')[0].textContent;
     this.code = this.editor.getValue();
     const data = {
       code: this.code,
@@ -88,24 +89,17 @@ export class CompileAndRunComponent implements OnInit {
     this._dataService.compileCode(data).subscribe(
       status => {
         this.output = status.output;
-        this.error = null;
-      },
-      error => {
-        this.output = null;
-        if ( error.error[0] === 'Input Missing') {
-          this.toastr.error(error.error[0]);
-        }
-        this.error = error.error[0];
+        this.error = status.error;
       }
     );
     this.disable = false;
-    this.loadingBar.complete();
   }
 
   onSubmitCode() {
     this.disable = true;
     this.code = this.editor.getValue();
     const data = {
+      username: this.userId,
       code: this.code,
       lang: this.lang,
       pcode: this.pid,

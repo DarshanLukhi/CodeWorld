@@ -2,10 +2,10 @@ var exec  = require('child_process').exec;
 var fs = require('fs');
 var cuid = require('cuid');
 var colors = require('colors');
+
 exports.stats = false ;
 exports.compileCPPWithInput = function ( envData , code  ,  fn ) 
 {
-	console.log("START");
 	
 	var filename = cuid.slug();
 	path = './Data/Contests/' + envData.ccode + '/'+envData.pcode + '/';
@@ -13,8 +13,6 @@ exports.compileCPPWithInput = function ( envData , code  ,  fn )
 	
 	fs.writeFile( path  +  filename +'.cpp' , code  , function(err )
 	{
-		console.log(path);
-
 		if(err)
 			console.log('ERROR: '.red + err);
 		else
@@ -24,7 +22,6 @@ exports.compileCPPWithInput = function ( envData , code  ,  fn )
 			commmand = 'g++ ' + path + filename +'.cpp -w -o '+ path + filename+'.exe' ;
 			exec(commmand , function ( error , stdout , stderr )
 			{
-				console.log("CALL");
 				if(error || stderr)
 				{
 					var out = { error : 'CTE' };
@@ -71,7 +68,7 @@ exports.compileCPPWithInput = function ( envData , code  ,  fn )
 								if(!finished)
 								{
 									// var out = { error : 'Time Limit exceed ' + (envData.options.timeout +1)/1000 };
-									var out = { error : 'NZEC'};
+									var out = { error : 'TLE'};
 									finished = true;
 									fn(out);
 								}

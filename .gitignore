@@ -7,6 +7,11 @@
 
 # dependencies
 /node_modules
+/Data/database/
+/Data/IDE/
+/Data/Contests/
+/Data/Problems/
+
 
 # profiling files
 chrome-profiler-events.json

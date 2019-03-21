@@ -8,7 +8,6 @@ var jwt = require('jsonwebtoken');
 var localStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var nodemailer = require('nodemailer');
-
 var compiler = require('./Data/Module/compilex');
 var contestCompiler = require('./Data/Module/contestCompilex');
 
@@ -21,6 +20,10 @@ var Problem = require('./Data/Model/problem');
 var Question = require('./Data/Model/question');
 var Contest = require('./Data/Model/contest');
 var Answer = require('./Data/Model/answer');
+var Solutions = require('./Data/Model/solution');
+var Ranking = require('./Data/Model/ranking');
+
+
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/codeworld',{useNewUrlParser:true}).then(
@@ -734,15 +737,10 @@ app.post('/compilecode' , function (req , res ) {
   {
       if(inputRadio)
       {
-          var envData = { OS : "windows" };     
-          console.log(true);
+          var envData = { OS : "windows" , options:{timeout : 5000}}; 
           compiler.compileJavaWithInput( envData , code , input ,  function(data){
 
-            if(data.error)
-            {
-              res.status(422).send([data.error]);
-            }    	
-            else
+            if(data)
             {
               res.status(200).send(data);
             }
@@ -750,14 +748,9 @@ app.post('/compilecode' , function (req , res ) {
       }
       else
       {
-          var envData = { OS : "windows" };     
-          console.log(false);
+          var envData = { OS : "windows" , options:{timeout : 1000}};
           compiler.compileJava( envData , code , function(data){
-            if(data.error)
-            {
-              res.status(422).send([data.error]);
-            }    	
-            else
+            if(data)
             {
               res.status(200).send(data);
             }
@@ -778,6 +771,7 @@ app.post('/compilecode' , function (req , res ) {
             }    	
             else
             {
+              
               res.status(200).send(data);
             }
           });            
@@ -792,6 +786,7 @@ app.post('/compilecode' , function (req , res ) {
             }    	
             else
             {
+              
               res.status(200).send(data);
             }
           });
@@ -806,49 +801,129 @@ app.post('/submitsolution' , function (req , res ) {
   var lang = req.body.lang;
   var pcode = req.body.pcode;
   var ccode = req.body.ccode;
+  var username = req.body.username;
+  var problems = [];
+  var response;
+
+
+  Ranking.findOne({contestCode: ccode,user_name:username},function(error,status){
+    if(!error && status != null){
+      problems = status.problems;
+    }
+    if(status == null){
+      let newranking = new Ranking({
+        user_name:username,
+        contestCode:ccode,
+        points: 0,
+        problems: [],
+        rank: 0,
+        rating: 0,
+      });
+      newranking.save((err,data) => {
+        if(err)
+        console.log(err)});
+    }
+      
+  });
   var dirpath = path.join(__dirname,'Data','Problems','/',pcode, '/');
   var output = fs.readFileSync(dirpath + 'Output1.txt').toString();
   if((lang === "C") || (lang === "C++"))
   {         
         var envData = { OS : "windows" , options:{timeout : 5000}, pcode:pcode, ccode:ccode};
         contestCompiler.compileCPPWithInput(envData , code , function(data){
-          
+  
           if(data.error)
           {
-              res.status(200).send({ status : data.error});
-              console.log({ status : data.error});
+              response = { status : data.error};
+              res.status(200).send(response);
           }    	
           else
           {
             
             if(data.output.trim() == output)
             {
-              res.status(200).send({ status : 'AC'});
-              console.log({ status : 'AC'});
+              response = { status : 'AC'};
+              res.status(200).send(response);
             }
             else
             {
-              res.status(200).send({ status : 'WA'});
-              console.log({ status : 'WA'});
+              response = { status : 'WA'};
+              res.status(200).send(response);
             }
+
           }
+          let solution = new Solutions( {
+            user_name: username,
+            DateTime:new Date(),
+            contestCode:ccode,
+            problemCode:pcode,
+            status: response.status,
+            language:lang,
+          });
+          solution.save((error,doc) => {if(error)console.log(error)});
+          if(response.status == 'AC' && !problems.includes(pcode)){
+            problems.push(pcode);
+            let ranking = {
+              user_name:username,
+              contestCode:ccode,
+              points: problems.length*100,
+              problems: problems,
+              rank: 0,
+              rating: 0,
+            }
+            Ranking.updateOne(({contestCode: ccode,user_name:username}),{$set : ranking },(err) =>{if(err)console.log(err)});
+          }
+          
         });            
   }
   if(lang === "Java")
   {
-    var envData = { OS : "windows" };     
-    console.log(true);
-    compiler.compileJavaWithInput( envData , code  ,  function(data){
+    var envData = { OS : "windows" , options:{timeout : 3000,killSignal: 'SIGINT'}, pcode:pcode, ccode:ccode};
+    contestCompiler.compileJavaWithInput(envData , code , function(data){
+      
+          if(data.error)
+          {
+              response = { status : data.error};
+              res.status(200).send(response);
+          }    	
+          else
+          {
+            
+            if(data.output.trim() == output)
+            {
+              response = { status : 'AC'};
+              res.status(200).send(response);
+            }
+            else
+            {
+              response = { status : 'WA'};
+              res.status(200).send(response);
+            }
 
-      if(data.error)
-      {
-        res.status(422).send([data.error]);
-      }    	
-      else
-      {
-        res.status(200).send(data);
-      }
-    });
+          }
+          let solution = new Solutions( {
+            user_name: username,
+            DateTime:new Date(),
+            contestCode:ccode,
+            problemCode:pcode,
+            status: response.status,
+            language:lang,
+          });
+          solution.save((error,doc) => {if(error)console.log(error)});
+          if(response.status == 'AC' && !problems.includes(pcode)){
+            problems.push(pcode);
+            let ranking = {
+              user_name:username,
+              contestCode:ccode,
+              points: problems.length*100,
+              problems: problems,
+              rank: 0,
+              rating: 0,
+            }
+            Ranking.updateOne(({contestCode: ccode,user_name:username}),{$set : ranking },(err) =>{if(err)console.log(err)});
+          }
+
+    });            
   }
   if( lang === "Python")
   {
@@ -857,23 +932,47 @@ app.post('/submitsolution' , function (req , res ) {
       
       if(data.error)
       {
-          res.status(200).send({ status : data.error});
-          console.log({ status : data.error});
+          response = { status : data.error};
+          res.status(200).send(response);
       }    	
       else
       {
         
         if(data.output.trim() == output)
         {
-          res.status(200).send({ status : 'AC'});
-          console.log({ status : 'AC'});
+          response = { status : 'AC'};
+          res.status(200).send(response);
         }
         else
         {
-          res.status(200).send({ status : 'WA'});
-          console.log({ status : 'WA'});
+          response = { status : 'WA'};
+          res.status(200).send(response);
         }
+
       }
+      let solution = new Solutions( {
+        user_name: username,
+        DateTime:new Date(),
+        contestCode:ccode,
+        problemCode:pcode,
+        status: response.status,
+        language:lang,
+      });
+      solution.save((error,doc) => {if(error)console.log(error)});
+      if(response.status == 'AC' && !problems.includes(pcode)){
+        problems.push(pcode);
+        let ranking = {
+          user_name:username,
+          contestCode:ccode,
+          points: problems.length*100,
+          problems: problems,
+          rank: 0,
+          rating: 0,
+        }
+        Ranking.updateOne(({contestCode: ccode,user_name:username}),{$set : ranking },(err) =>{if(err)console.log(err)});
+      }
+      
+
     });            
   }
 });

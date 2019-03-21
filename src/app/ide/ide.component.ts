@@ -71,18 +71,10 @@ export class IdeComponent implements OnInit {
       inputRadio: this.inputRadio,
       lang: this.lang
     };
-    console.log(data);
     this._dataService.compileCode(data).subscribe(
       status => {
         this.output = status.output;
-        this.error = null;
-      },
-      error => {
-        this.output = null;
-        if ( error.error[0] === 'Input Missing') {
-          this.toastr.error(error.error[0]);
-        }
-        this.error = error.error[0];
+        this.error = status.error;
       }
     );
   }
