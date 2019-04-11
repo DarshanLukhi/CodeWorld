@@ -26,10 +26,17 @@ export class ForgetPasswordComponent implements OnInit {
 
   // After enter username for reset pssword
   sendCode() {
-        $('#verifyCode').css('display', 'block');
-        $('#sendCode').css('display', 'none');
+        console.log(this.model.user_name);
         this.model.code = String( Math.floor(Math.random() * 900000) + 100000 );
-        this.userService.sendForgetPasswordCode(this.model).subscribe();
+        this.userService.sendForgetPasswordCode(this.model).subscribe(
+          res => {
+            $('#verifyCode').css('display', 'block');
+            $('#sendCode').css('display', 'none');
+          },
+          err => {
+            this.toastr.error(err.error.message);
+          }
+        );
       }
 
  // After enter verification code for verify

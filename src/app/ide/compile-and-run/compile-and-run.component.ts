@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { DataService } from './../../services/data.service';
 import { Router, ActivatedRoute} from '@angular/router';
-import { LoadingBarService } from '@ngx-loading-bar/core';
 import { UserService } from 'src/app/services/user.service';
 
 declare var $: any;
@@ -23,12 +22,12 @@ export class CompileAndRunComponent implements OnInit {
   inputRadio = true;
   lang = 'C';
   output;
-  error;
+  error = false;
   public editor;
   public theme = 'ace/theme/clouds';
   public buf;
   public userId;
-  public disable = false;
+  public buttonStatus = false;
   constructor(private _dataService: DataService, private toastr: ToastrService,
     private route: ActivatedRoute, private router: Router, private userService: UserService) { }
 
@@ -45,18 +44,27 @@ export class CompileAndRunComponent implements OnInit {
       that.editor = ace.edit('editor');
       that.editor.setTheme('ace/theme/clouds');
       that.editor.session.setMode('ace/mode/c_cpp');
+      that.editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: true
+    });
     });
     this.id = this.route.snapshot.paramMap.get('id');
     this.pid = this.route.snapshot.paramMap.get('pid');
     this._dataService.getContest(this.id).subscribe(
       status => {
-        if (status[0].contestStatus !== 'Start') {
-            this.contestError = true;
+        console.log(this.id);
+        if (status[0].contestStatus !== 'Start' && this.id !== 'PRACTICE') {
+          this.toastr.warning('The contest problem is not available for accepting solutions.');
+          this.id = 'PRACTICE';
         }
       },
-      err => {
-        // this.error = 'The contest problem is not available for accepting solutions.';
-        this.contestError = true;
+      error => {
+        if ( this.id !== 'PRACTICE' ) {
+          this.toastr.error('Invalid Contest');
+          this.router.navigate(['/contests']);
+        }
       }
     );
 
@@ -78,7 +86,7 @@ export class CompileAndRunComponent implements OnInit {
     this.editor.setTheme(this.theme);
   }
   onRunCode() {
-    this.disable = true;
+    this.buttonStatus = true;
     this.code = this.editor.getValue();
     const data = {
       code: this.code,
@@ -90,32 +98,38 @@ export class CompileAndRunComponent implements OnInit {
       status => {
         this.output = status.output;
         this.error = status.error;
+        this.buttonStatus = false;
       }
     );
-    this.disable = false;
+
   }
 
   onSubmitCode() {
-    this.disable = true;
+    this.buttonStatus = true;
     this.code = this.editor.getValue();
     const data = {
       username: this.userId,
       code: this.code,
       lang: this.lang,
       pcode: this.pid,
-      ccode: this.id
+      ccode: this.id,
 
     };
     this._dataService.compileContestCode(data).subscribe(
       status => {
-        this.toastr.success(status.status);
+        this.buttonStatus = false;
+        if (status.status === 'AC') {
+          this.toastr.success(status.status);
+        } else {
+          this.toastr.error(status.status);
+        }
       },
       error => {
         this.output = null;
         this.error = error.error[0];
+        this.buttonStatus = false;
       }
     );
-    this.disable = false;
   }
 
 }

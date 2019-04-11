@@ -6,11 +6,12 @@
 /out-tsc
 
 # dependencies
+
 /node_modules
-/Data/database/
-/Data/IDE/
-/Data/Contests/
-/Data/Problems/
+/Data/database
+/Data/IDE
+/Data/Contests
+/Data/Problems
 
 
 # profiling files

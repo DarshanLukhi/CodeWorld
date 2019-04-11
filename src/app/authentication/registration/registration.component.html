@@ -2,11 +2,8 @@
     <app-header></app-header>
     <div id="page-wrapper">
         <div class="container-fluid">
-          
             <div class="center_div " >
               <br>
-              <article class="card-body mx-auto" style="max-width: 400px;">
-                
                 <!--Registration form start-->
                 <form #signUpForm="ngForm" class="well " (ngSubmit)="registerUser(signUpForm.value)">
   
@@ -45,9 +42,11 @@
                         <label *ngIf="user_name.errors.required" style="color:red">*Username is required </label>
                         <label *ngIf="user_name.errors.pattern" style="color:red">*Invalid username . </label>
                       </div>
+                      
 
                       <div class="form-group input-group">
-                          &nbsp;&nbsp;<input [(ngModel)]="userService.selectedUser.gender" #gender="ngModel" name="gender"  type="radio" value="Male" required> &nbsp; <label>Male</label>
+                        &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;
+                          <input [(ngModel)]="userService.selectedUser.gender" #gender="ngModel" name="gender"  type="radio" value="Male" required> &nbsp; <label>Male</label>
                           <input [(ngModel)]="userService.selectedUser.gender" #gender="ngModel" name="gender"  type="radio" value="Female" checked> &nbsp; <label>Female</label>
                           <input [(ngModel)]="userService.selectedUser.gender" #gender="ngModel" name="gender"  type="radio" value="Other" checked> &nbsp; <label>Other</label>
                       </div>
@@ -114,7 +113,6 @@
   
                 </form>
                 <!--Registration form end-->
-              </article>
             </div> <!-- card.// -->
 
            

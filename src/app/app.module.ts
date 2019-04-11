@@ -52,6 +52,8 @@ import { IdeComponent } from './ide/ide.component';
 import { ViewcontestComponent } from './contests/viewcontest/viewcontest.component';
 import { ViewContestProblemComponent } from './contests/view-contest-problem/view-contest-problem.component';
 import { CompileAndRunComponent } from './ide/compile-and-run/compile-and-run.component';
+import { RankingComponent } from './ranking/ranking.component';
+import { ViewFileComponent } from './ide/view-file/view-file.component';
 
 
 
@@ -79,24 +81,20 @@ const routes: Routes = [
   { path: 'contests', component: ContestsComponent },
   { path: 'contest/:id', component: ViewcontestComponent },
   { path: 'contest/:id/:pid', component: ViewContestProblemComponent },
-
-
+  { path: 'rankings/:id', component: RankingComponent },
+  { path: 'viewsolution/:username/:solutionID', component: ViewFileComponent },
   // practice
   { path: 'practice', component: PracticeComponent },
-
   // Admin Problem
   { path: 'admin/problems', component: ManageProblemsComponent , canActivate: [AdminAuthGuard]},
   { path: 'admin/problem/create', component: CreateProblemsComponent , canActivate: [AdminAuthGuard]},
   { path: 'admin/problem/:id', component: ViewProblemComponent , canActivate: [AdminAuthGuard]},
-
   // Admin Contests
   { path: 'admin/contests', component: ManageContestsComponent , canActivate: [AdminAuthGuard]},
   { path: 'admin/contest/create', component: CreateContestsComponent , canActivate: [AdminAuthGuard]},
   { path: 'admin/contest/:id', component: ViewContestComponent , canActivate: [AdminAuthGuard]},
-
   // Admin User
   { path: 'admin/crud', component: ManageUserComponent , canActivate: [AdminAuthGuard]},
-
   // Discuss
   { path: 'discuss/answer/:id', component: AnswerComponent },
   { path: 'discuss', component: DiscussComponent },
@@ -117,6 +115,7 @@ const routes: Routes = [
     EditProfileComponent,
     ForgetPasswordComponent,
     ResetPasswordComponent,
+    RankingComponent,
 
     // Admin Problems
     ManageProblemsComponent,
@@ -141,6 +140,7 @@ const routes: Routes = [
     ViewcontestComponent,
     ViewContestProblemComponent,
     CompileAndRunComponent,
+    ViewFileComponent,
 
 
   ],
@@ -160,6 +160,7 @@ const routes: Routes = [
     useClass: AuthInterceptor,
     multi: true
   }, UserService, DiscussService, DataService, AuthGuard],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

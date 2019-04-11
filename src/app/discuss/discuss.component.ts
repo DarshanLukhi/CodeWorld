@@ -14,7 +14,7 @@ import * as $ from 'jquery';
 export class DiscussComponent implements OnInit {
   constructor(private _dataService: DiscussService, private userService: UserService, private toastr: ToastrService,
     private route: ActivatedRoute, private router: Router, private location: Location) { }
-
+  
   public ques: any;
   q;
   data;
@@ -28,7 +28,7 @@ export class DiscussComponent implements OnInit {
         this.q = result;
         this.q.reverse();
       });
-      if (this.userService.isLoggedIn()) {
+      if (this.userService.isLoggedIn()){
         this.userId = this.userService.getUserPayload().user_name;
         this.isNotLogin = false;
       }
@@ -72,17 +72,19 @@ export class DiscussComponent implements OnInit {
   }
 
 
-  deleteQuestion(event, id) {
+  deleteQuestion(event, id){
     this._dataService.deleteQuestion(id).subscribe(
       status => {
         this.toastr.success('deleted');
         // navigate
+        
         location.reload();
       },
       error => {
         this.toastr.error(error.error[0]);
       }
     );
+    
   }
 
 

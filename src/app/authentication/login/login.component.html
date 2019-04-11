@@ -4,9 +4,7 @@
         <div class="container-fluid">
           
             <div class="center_div " >
-              <br>
-              <article class="card-body mx-auto" style="max-width: 350px;"> <br>  <br>  <br>
-                
+              <br><br><br>
                 <!--Login form start-->
                 <form #loginForm="ngForm" class="well " (ngSubmit)="loginUser(loginForm.value)"> 
   
@@ -18,9 +16,6 @@
                         <input name="user_name" #user_name="ngModel" [(ngModel)]="model.username" class="form-control" placeholder="Username" type="text">
                   </div> <!-- form-group// -->
            
-                    
-              
-  
                   <div class="form-group input-group">
                     <span class="input-group-addon"> <i class="fa fa-lock"></i> </span>
                     <input name="password" #password="ngModel" [(ngModel)]="model.password" class="form-control" placeholder="Enter password" type="password">
@@ -37,7 +32,6 @@
                 <!--Login form end-->
 
                 <!--Error message-->
-              </article>
             </div> <!-- card.// -->
             <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>  
         </div>

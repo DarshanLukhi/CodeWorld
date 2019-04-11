@@ -6,6 +6,7 @@ import {HttpHeaders} from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
+
 export class DiscussService {
 
   constructor(private _http: HttpClient) { }
@@ -14,16 +15,13 @@ export class DiscussService {
     return this._http.get<any>(environment.apiEndPoint.concat('/questions'));
   }
 
-  getMyQuestions(data) {
-    return this._http.post<any>(environment.apiEndPoint.concat('/my-questions'), data);
-  }
-
   getAnswers(data) {
     return this._http.get<any>(environment.apiEndPoint.concat('/answers'), {headers : {'questionid' : data}});
   }
 
-  getMyAnswers(data) {
-    return this._http.post<any>(environment.apiEndPoint.concat('/my-answers'), data);
+  getLikes(data) {
+    return this._http.get<any>(environment.apiEndPoint.concat('/loadlikes'),
+        {headers : {'questionid' : data.questionId, 'userid': data.userId}});
   }
 
   getQuestionById(data) {
@@ -58,7 +56,15 @@ export class DiscussService {
   }
 
   deleteAnswer(data) {
-    return this._http.delete<any>(environment.apiEndPoint.concat('/deleteanswer'), {headers : {'answerid' : data.answerid,
-    'questionid' : data.questionid}});
+    // tslint:disable-next-line:max-line-length
+    return this._http.delete<any>(environment.apiEndPoint.concat('/deleteanswer'), {headers : {'answerid' : data.answerid, 'questionid' : data.questionid}});
+  }
+
+  getMyAnswers(data) {
+    return this._http.post<any>(environment.apiEndPoint.concat('/my-answers'), data);
+  }
+
+  getMyQuestions(data) {
+    return this._http.post<any>(environment.apiEndPoint.concat('/my-questions'), data);
   }
 }

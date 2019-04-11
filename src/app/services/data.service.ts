@@ -45,6 +45,21 @@ export class DataService {
   findAllProblem(data) {
     return this._http.post<any>(environment.apiEndPoint + '/findAllProblems' , data);
   }
+  getRankList(data) {
+    return this._http.post<any>(environment.apiEndPoint + '/getRankList' ,  data);
+  }
+
+  getSolutionHistory() {
+    return this._http.get(environment.apiEndPoint + '/getSolutionHistory');
+  }
+  getFile(data) {
+    return this._http.post<any>(environment.apiEndPoint + '/getFile' ,  data);
+  }
+
+  getSolutionHistoryById(data) {
+    // tslint:disable-next-line:max-line-length
+    return this._http.get<any>(environment.apiEndPoint.concat('/getSolutionHistoryById'), {headers : {'userid' : data, 'NoAuth' : 'True' }});
+  }
 
 
 }

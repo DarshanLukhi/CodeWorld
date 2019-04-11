@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { DataService } from './../../../services/data.service';
 import { ToastrService } from 'ngx-toastr';
 import * as $ from 'jquery';
@@ -13,7 +13,7 @@ export class ViewContestComponent implements OnInit {
   public id;
   public data = [];
   public sendData;
-  constructor(private route: ActivatedRoute, private _dataService: DataService, private toastr: ToastrService) { }
+  constructor(private route: ActivatedRoute, private _dataService: DataService, private toastr: ToastrService, private router: Router) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -38,6 +38,7 @@ export class ViewContestComponent implements OnInit {
       that._dataService.updateContest(that.sendData).subscribe(
         sts => {
           that.toastr.success('Contest status update successfully');
+          that.router.navigate(['/admin/contests']);
         },
         err => {
           console.log('e');

@@ -14,7 +14,7 @@
             </div>
        
             
-              
+            
            
            <div class="row">
                <div class="col-lg-10">
@@ -65,11 +65,11 @@
                                       </button>
                                        &nbsp; 
                                   </div>
-                                  <div class="col-md-1"><button class="btn btn-success pull-right" (click)="onRunCode()">
+                                  <div class="col-md-1"><button class="btn btn-success pull-right" [disabled]="buttonStatus" (click)="onRunCode()">
                                       
                                       <span class="fa fa-cog">&nbsp;</span>
                                       RUN</button>&nbsp;&nbsp;</div>
-                                <div class="col-md-1"><button class="btn btn-success pull-right" (click)="onSubmitCode()">
+                                <div class="col-md-1"><button class="btn btn-success pull-right" [disabled]="buttonStatus" (click)="onSubmitCode()">
                                     SUBMIT</button></div>
                                   
                               </div>

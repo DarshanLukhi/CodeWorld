@@ -27,9 +27,8 @@ exports.compileJava = function (envData , code , fn ){
 			    		console.log('INFO: '.green + path + "/CodeWorld.java created");	
 						        
 			    	
-			    	if(envData.OS === "windows")
 						var command = "cd "+path+ " & " + " javac CodeWorld.java";
-					exec(command , function( error , stdout , stderr ){
+						exec(command , function( error , stdout , stderr ){
 						if(error)
 						{
 							
@@ -50,31 +49,33 @@ exports.compileJava = function (envData , code , fn ){
 							var x = exec(command  ,options, function( error , stdout , stderr ){
 								if(error)
 								{
+									
 									if(x.signalCode == 'SIGINT'){
-										var out = { error : 'Time Limit Exceeded',output : stdout};
+										var out = { error : 'ERROR CODE : TLE\nDetails : Time Limit Exceeded',output : stdout};
 										if(!finished)
 										{
 											finished = true;
 											fn(out);
-										}
+										}	
 									}
 								
 									
 									
 									psTree(x.pid, function (err, children) {
 										children.forEach(p => {
-										exec('taskkill/pid '+p.PID+' /F',function( err , stdout , stderr ){
-											if(err)
-												console.log("kill Error".red+error);	
+											exec('taskkill/pid '+p.PID+' /F',function( err , stdout , stderr ){
+												if(err)
+													console.log("kill Error".red+error);	
 
-										});})
+											});
 										});
+									});
 										
 									
 										
 									if(error.toString().indexOf('stdout maxBuffer length exceeded') != -1)
 									{
-										var out = { error : 'Error: stdout maxBuffer exceeded.\nYou might have initialized an infinite loop.' };
+										var out = { error : 'ERROR CODE : SIGTSTP\nMaximum Buffer Size Exceeded' };
 										if(!finished)
 										{
 
@@ -169,7 +170,7 @@ exports.compileJavaWithInput = function (envData , code , input , fn ){
 										if(error)
 										{
 											if(x.signalCode == 'SIGINT'){
-												var out = { error : 'Time Limit Exceeded',output : stdout};
+												var out = { error : 'ERROR CODE : TLE\nDetails : Time Limit Exceeded',output : stdout};
 												if(!finished)
 												{
 													finished = true;
@@ -192,7 +193,7 @@ exports.compileJavaWithInput = function (envData , code , input , fn ){
 												
 											if(error.toString().indexOf('stdout maxBuffer length exceeded') != -1)
 											{
-												var out = { error : 'Error: stdout maxBuffer exceeded.\nYou might have initialized an infinite loop.' };
+												var out = { error : 'ERROR CODE : SIGTSTP\nMaximum Buffer Size Exceeded' };
 												if(!finished)
 												{
 

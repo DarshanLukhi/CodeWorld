@@ -17,6 +17,7 @@ export class CreateProblemsComponent implements OnInit {
   public Defination: any;
   public No_of_testcase: any;
   public Testcase: any;
+  public timeLimit: any;
   public publish = false;
   data;
   defFile;
@@ -58,6 +59,7 @@ export class CreateProblemsComponent implements OnInit {
         problemName: this.problemName,
         problemType: this.problemType,
         problemStatus : this.publish,
+        timeLimit : this.timeLimit,
         Defination: this.def,
         No_of_testcase: this.No_of_testcase,
         Testcase: this.tc

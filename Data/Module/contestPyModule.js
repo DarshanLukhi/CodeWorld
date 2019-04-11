@@ -19,22 +19,45 @@ exports.compilePythonWithInput = function( envData , code ,  fn){
 		}
 		if(!err)
 		{
-
+			
 			var command = 'python ' + path + filename +'.py < ' + path +'Testcase1.txt ' ;
-			exec( command , function ( error , stdout , stderr ){
+			var a = exec( command ,envData.options,function ( error , stdout , stderr ){
+				
 				if(error)
 				{
-					var out = { error : 'CTE' };
-					if(!finished)
+				
+					if(a.signalCode == 'SIGINT')
 					{
+						var out = { error : 'TLE', location : path  +  filename +'.py' };
+						psTree(a.pid, function (err, children) {
+							children.forEach(p => {
+								exec('taskkill/pid '+p.PID+' /F',function( err , stdout , stderr ){
+									if(err)
+										console.log("kill Error".red+error);	
+								});
+							});
+						});
+						if(!finished)
+						{
 
-						finished = true;
-						fn(out);
-					}													
+							finished = true;
+							fn(out);
+						}	
+					}
+					else
+					{
+						var out = { error : 'CTE', location : path  +  filename +'.py' };
+						if(!finished)
+						{
+
+							finished = true;
+							fn(out);
+						}													
+					}
 				}
 				else
 				{
-					var out = { output : stdout};
+					var out = { output : stdout, location : path  +  filename +'.py'};
 					if(!finished)
 					{
 						finished = true;
@@ -42,23 +65,7 @@ exports.compilePythonWithInput = function( envData , code ,  fn){
 					}
 				}
 			});
-			if(envData.options.timeout && !finished)
-			{
-				// kill the programme after envData.options.timeout ms
-				setTimeout(function (){
-					exec("taskkill /im "+filename+".exe /f > nul",function( error , stdout , stderr )
-					{
-									
-						if(!finished)
-						{
-							
-							var out = { error : 'TLE'};
-							finished = true;
-							fn(out);
-						}
-				});
-				},envData.options.timeout);
-			}
+
 		}
 	});
 }

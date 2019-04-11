@@ -27,7 +27,7 @@ exports.compileJavaWithInput = function (envData , code  , fn ){
 				
 						if(error || stderr)
 						{
-							var out = { error : 'CTE' };
+							var out = { error : 'CTE', location : path  +  '/CodeWorld.java' };
 							if(!finished)
 							{
 
@@ -46,7 +46,7 @@ exports.compileJavaWithInput = function (envData , code  , fn ){
 									
 									
 									if(error.killed){
-										var out = { error : 'TLE'};
+										var out = { error : 'TLE', location : path  +  '/CodeWorld.java'};
 										if(!finished)
 										{
 											finished = true;
@@ -63,7 +63,7 @@ exports.compileJavaWithInput = function (envData , code  , fn ){
 									});
 									
 
-									var out = { error : 'RTE' };
+									var out = { error : 'RTE', location : path  +  '/CodeWorld.java' };
 									if(!finished)
 									{
 
@@ -75,7 +75,7 @@ exports.compileJavaWithInput = function (envData , code  , fn ){
 								else
 								{						
 			
-									var out = { output : stdout};
+									var out = { output : stdout, location : path  +  '/CodeWorld.java'};
 									if(!finished)
 									{
 

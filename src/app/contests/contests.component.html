@@ -1,167 +1,152 @@
 <div id="wrapper">
-        <app-header></app-header>
-        <div id="page-wrapper">
-        
-            <div class="container-fluid">
-        
-                <!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Contests <small>Details</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-dashboard"></i> Contests
-                            </li>
-                        </ol>
-                    </div>
+    <app-header></app-header>
+    <div id="page-wrapper">
+
+        <div class="container-fluid">
+
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">
+                        Contests <small>Details</small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li class="active">
+                            <i class="fa fa-dashboard"></i> Contests
+                        </li>
+                    </ol>
                 </div>
-                
-    
-    
-    
-    
-            
-                    
-                
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#LiveContests" aria-controls="LiveContests" role="tab" data-toggle="tab">Live Contests</a></li>
-                        <li role="presentation"><a href="#FutureContests" aria-controls="FutureContests" role="tab" data-toggle="tab">Future Contests</a></li>
-                        <li role="presentation"><a href="#PastContests" aria-controls="PastContests" role="tab" data-toggle="tab">Past Contests</a></li>
-                    </ul>
-                
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane fade in active table-responsive" id="LiveContests">
-                            <div *ngIf="no_live != 0; else elseblock">
-                            <table class="table table-striped table-bordered table-condensed" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>CODE</th>
-                                        <th>CODE NAME</th>
-                                        <th>START</th>
-                                        <th>END</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                  
-                                  <tr *ngFor="let i of LiveContests" (click)="onClick(i)">
-                                        <td style="padding-top:14px;">{{i.contestCode}}</td>
-                                        <td style="padding-top:14px;">{{i.contestName}}</td>
-                                        <td style="padding-top:2px;">{{i.startDateTime | date}}<br>{{i.startDateTime  | date:"HH:mm"}}</td>
-                                        <td style="padding-top:2px;">{{i.endDateTime | date}}<br>{{i.endDateTime  | date:"HH:mm"}}</td>
-                                    </tr>
-                                  
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane fade table-responsive" id="FutureContests">
-                            <div *ngIf="no_future != 0; else elseblock">
-                            <table  class="table table-striped table-bordered table-condensed" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>CODE</th>
-                                        <th>CODE NAME</th>
-                                        <th>START</th>
-                                        <th>END</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                  
-                                  <tr *ngFor="let i of FutureContests" (click)="onClick(i)">
+            </div>
+
+
+
+
+
+
+
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#LiveContests" aria-controls="LiveContests" role="tab"
+                        data-toggle="tab">Live Contests</a></li>
+                <li role="presentation"><a href="#FutureContests" aria-controls="FutureContests" role="tab"
+                        data-toggle="tab">Future Contests</a></li>
+                <li role="presentation"><a href="#PastContests" aria-controls="PastContests" role="tab"
+                        data-toggle="tab">Past Contests</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active table-responsive" id="LiveContests">
+                    <div *ngIf="no_live != 0; else elseblock">
+                        <table class="table table-striped table-bordered table-condensed" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>CODE</th>
+                                    <th>CODE NAME</th>
+                                    <th>START</th>
+                                    <th>END</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr *ngFor="let i of LiveContests | paginate: { itemsPerPage: 10, currentPage: p[0] }"
+                                    (click)="onClick(i)">
                                     <td style="padding-top:14px;">{{i.contestCode}}</td>
                                     <td style="padding-top:14px;">{{i.contestName}}</td>
-                                    <td style="padding-top:2px;">{{i.startDateTime | date}}<br>{{i.startDateTime  | date:"HH:mm"}}</td>
-                                    <td style="padding-top:2px;">{{i.endDateTime | date}}<br>{{i.endDateTime  | date:"HH:mm"}}</td>
-                                    </tr>
-                                  
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-    
-                        <div  role="tabpanel" class="tab-pane fade table-responsive" id="PastContests">
-                            <div *ngIf="no_past != 0; else elseblock">
-                                <table  class="table table-striped table-bordered table-condensed" cellspacing="0" width="100%">
+                                    <td style="padding-top:2px;">
+                                        {{i.startDateTime | date}}<br>{{i.startDateTime  | date:"HH:mm"}}</td>
+                                    <td style="padding-top:2px;">
+                                        {{i.endDateTime | date}}<br>{{i.endDateTime  | date:"HH:mm"}}</td>
+                                </tr>
 
-                                    <thead>
-                                        <tr>
-                                            <th>CODE</th>
-                                            <th>CODE NAME</th>
-                                            <th>START</th>
-                                            <th>END</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    
-                                    <tr *ngFor="let i of PastContests" (click)="onClick(i)">
-                                            <td style="padding-top:14px;">{{i.contestCode}}</td>
-                                            <td style="padding-top:14px;">{{i.contestName}}</td>
-                                            <td style="padding-top:2px;">{{i.startDateTime | date}}<br>{{i.startDateTime  | date:"HH:mm"}}</td>
-                                            <td style="padding-top:2px;">{{i.endDateTime | date}}<br>{{i.endDateTime  | date:"HH:mm"}}</td>
-                                        </tr>
-                                    
-                                    </tbody>
-                                </table>
-                            </div>
-                            <ng-template #elseblock>
-                                <div style="padding: 5px 0px 10px 15px">
-                                    No Contest Available Now
-                                </div>
-                            </ng-template>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div *ngIf="no_live > 10" class="text-center col-12 " style="padding-top : 10px;">
+                        <pagination-controls (pageChange)="p[0] = $event"></pagination-controls>
+                    </div>
+
+                </div>
+
+                <div role="tabpanel" class="tab-pane fade table-responsive" id="FutureContests">
+                    <div *ngIf="no_future != 0; else elseblock">
+                        <table class="table table-striped table-bordered table-condensed" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>CODE</th>
+                                    <th>CODE NAME</th>
+                                    <th>START</th>
+                                    <th>END</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr
+                                    *ngFor="let i of FutureContests | paginate: { itemsPerPage: 10, currentPage: p[1] }">
+                                    <td style="padding-top:14px;">{{i.contestCode}}</td>
+                                    <td style="padding-top:14px;">{{i.contestName}}</td>
+                                    <td style="padding-top:2px;">
+                                        {{i.startDateTime | date}}<br>{{i.startDateTime  | date:"HH:mm"}}</td>
+                                    <td style="padding-top:2px;">
+                                        {{i.endDateTime | date}}<br>{{i.endDateTime  | date:"HH:mm"}}</td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                        <div *ngIf="no_future > 10" class="text-center col-12">
+                            <pagination-controls (pageChange)="p[1] = $event"></pagination-controls>
                         </div>
-    
-                        
-    
                     </div>
                 </div>
-                
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-                
-            
-            <!-- /.container-fluid -->
+
+                <div role="tabpanel" class="tab-pane fade table-responsive" id="PastContests">
+                    <div *ngIf="no_past != 0; else elseblock">
+                        <table class="table table-striped table-bordered table-condensed" cellspacing="0" width="100%">
+
+                            <thead>
+                                <tr>
+                                    <th>CODE</th>
+                                    <th>CODE NAME</th>
+                                    <th>START</th>
+                                    <th>END</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr *ngFor="let i of PastContests | paginate: { itemsPerPage: 10, currentPage: p[2] }"
+                                    (click)="onClick(i)">
+                                    <td style="padding-top:14px;">{{i.contestCode}}</td>
+                                    <td style="padding-top:14px;">{{i.contestName}}</td>
+                                    <td style="padding-top:2px;">
+                                        {{i.startDateTime | date}}<br>{{i.startDateTime  | date:"HH:mm"}}</td>
+                                    <td style="padding-top:2px;">
+                                        {{i.endDateTime | date}}<br>{{i.endDateTime  | date:"HH:mm"}}</td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                        <div *ngIf="no_past > 10" class="text-center col-12">
+                            <pagination-controls (pageChange)="p[2] = $event"></pagination-controls>
+                        </div>
+                    </div>
+
+                </div>
+                <ng-template #elseblock>
+                    <div style="padding: 5px 0px 10px 15px">
+                        No Contest Available Now
+                    </div>
+                </ng-template>
+
+
+            </div>
         </div>
-            <!-- /#page-wrapper -->
+
+
+        <!-- /.container-fluid -->
     </div>
-<!--     
-    <div class="table-responsive">
-        <table class="table color-table dark-table">
-            <thead>
-                <tr>
-                    <th>CODE</th>
-                    <th>CODE NAME</th>
-                    <th>START</th>
-                    <th>END</th>
-                </tr>
-            </thead>
-            <tbody>
-              
-              <tr *ngFor="let i of data">
-                    <td>{{i.cid}}</td>
-                    <td>{{i.cname}}</td>
-                    <td>{{i.START}}</td>
-                    <td>{{i.END}}</td>
-                </tr>
-              
-            </tbody>
-        </table>
-    </div> 
--->
+    <!-- /#page-wrapper -->
+</div>

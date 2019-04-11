@@ -2,12 +2,13 @@ var exec  = require('child_process').exec;
 var fs = require('fs');
 var cuid = require('cuid');
 var colors = require('colors');
-
+psTree = require('ps-tree');
 
 exports.stats = false ;
 
 
 exports.compileCPP = function ( envData ,  code , fn ) {
+	
 	var filename = cuid.slug();
 	path = './Data/IDE/';
 	var finished = false;
@@ -23,7 +24,8 @@ exports.compileCPP = function ( envData ,  code , fn ) {
 
 				//compile c code
 				commmand = 'g++ ' + path + filename +'.cpp -w -o '+path + filename +'.exe' ;
-				exec(commmand , function ( error , stdout , stderr ){
+				exec(commmand , function ( error , stdout , stderr ) {
+					
 					if(error)
 					{
 						if(exports.stats)
@@ -55,15 +57,33 @@ exports.compileCPP = function ( envData ,  code , fn ) {
 					}
 					else
 					{
+						
 
-						var tempcommand = "cd "+ path + " & "+ filename ;
-						exec( tempcommand , function ( error , stdout , stderr ){
+						var command = "cd "+ path + " & "+ filename ;
+						var a = exec( command ,envData.options, function ( error , stdout , stderr ){
 							if(error)
 							{
-
-								if(error.toString().indexOf('stdout maxBuffer length exceeded') != -1)
+								if(a.signalCode == 'SIGINT')
 								{
-									var out = { error : 'Error: stdout maxBuffer exceeded.\nYou might have initialized an infinite loop.' };
+									var out = { error : 'ERROR CODE : TLE\nDetails : Time Limit Exceeded',output : stdout};
+									/*
+									exec("taskkill /im "+filename+".exe /f > nul",function( error , stdout , stderr )
+									{								
+										if(!finished)
+										{
+											finished = true;
+											fn(out);
+										}						
+									});	
+									*/
+									psTree(a.pid, function (err, children) {
+										children.forEach(p => {
+											exec('taskkill/pid '+p.PID+' /F',function( err , stdout , stderr ){
+												if(err)
+													console.log("kill Error".red+error);	
+											});
+										});
+									});
 									if(!finished)
 									{
 
@@ -71,28 +91,37 @@ exports.compileCPP = function ( envData ,  code , fn ) {
 										fn(out);
 									}
 								}
-								/*
+								else if(error.toString().indexOf('stdout maxBuffer length exceeded') != -1)
+								{
+					
+									var out = { error : 'ERROR CODE : SIGTSTP\nMaximum Buffer Size Exceeded' };
+									if(!finished)
+									{
+										finished = true;
+										fn(out);
+									}
+								}
 								else
 								{
-									if(exports.stats)
+									if(!finished)
 									{
-										console.log('INFO: '.green + filename + '.cpp contained an error while executing');
+
+										finished = true;
+										if(exports.stats)
+										{
+											console.log('INFO: '.green + filename + '.cpp successfully compiled and executed !');
+										}
+										var out = {output: stdout};
+										if(!stdout)
+										{
+												var out = {output: 'No Output'};
+										}
+										fn(out);
+									
 									}
 									
-									var out = { error : stderr};
-									console.log(error);
-									if(out.error)
-									{
-
-										if(!finished)
-										{
-
-											finished = true;		
-											fn(out);
-										}
-									}
-
-								}*/
+								}
+								
 							}
 							else if(stderr) {
 								var x =  path + filename +'.cpp:';
@@ -128,24 +157,6 @@ exports.compileCPP = function ( envData ,  code , fn ) {
 							}
 						});
 						
-						if(envData.options.timeout && !finished)
-						{
-							setTimeout(function (){
-								exec("taskkill /im "+filename+".exe /f > nul",function( error , stdout , stderr )
-								{
-
-								
-									if(!finished)
-									{
-										// var out = { error : 'Time Limit exceed ' + (envData.options.timeout +1)/1000 };
-										var out = { error : 'NZEC'};
-										finished = true;
-										fn(out);
-									}
-								
-								});
-							},envData.options.timeout);
-						}
 					}
 
 				});
@@ -170,8 +181,7 @@ exports.compileCPPWithInput = function ( envData , code , input ,  fn )
 			else
 			{
 				console.log('INFO: '.green + filename +'.cpp created');
-				if(envData.cmd ==='g++')
-				{
+
 
 					//compile c code
 					commmand = 'g++ ' + path + filename +'.cpp -w -o '+ path + filename+'.exe' ;
@@ -225,16 +235,45 @@ exports.compileCPPWithInput = function ( envData , code , input ,  fn )
 								});
 								var tempcommand = "cd "+ path + " & "+ filename ;
 
-								exec( tempcommand + '<' + inputfile , function( error , stdout , stderr ){
+								var a = exec( tempcommand + '<' + inputfile , envData.options,function( error , stdout , stderr )
+								{
 
 									if(error)
 									{
-										if(error.toString().indexOf('stdout maxBuffer length exceeded') != -1)
+										if(a.signalCode == 'SIGINT')
 										{
-											var out = { error : 'Error: stdout maxBuffer exceeded.\nYou might have initialized an infinite loop.' };
+											var out = { error : 'ERROR CODE : TLE\nDetails : Time Limit Exceeded',output : stdout};
+											/*
+											exec("taskkill /im "+filename+".exe /f > nul",function( error , stdout , stderr )
+											{								
+												if(!finished)
+												{
+													finished = true;
+													fn(out);
+												}						
+											});	
+											*/
+											psTree(a.pid, function (err, children) {
+												children.forEach(p => {
+													exec('taskkill/pid '+p.PID+' /F',function( err , stdout , stderr ){
+														if(err)
+															console.log("kill Error".red+error);	
+													});
+												});
+											});
 											if(!finished)
 											{
 
+												finished = true;
+												fn(out);
+											}
+										}
+										else if(error.toString().indexOf('stdout maxBuffer length exceeded') != -1)
+										{
+							
+											var out = { error : 'ERROR CODE : SIGTSTP\nMaximum Buffer Size Exceeded' };
+											if(!finished)
+											{
 												finished = true;
 												fn(out);
 											}
@@ -260,7 +299,8 @@ exports.compileCPPWithInput = function ( envData , code , input ,  fn )
 											
 										}
 									}
-									else if(stderr) {
+									else if(stderr) 
+									{
 										var x =  path + filename +'.cpp:';
 										var regex = new RegExp(x, 'g');
 
@@ -286,28 +326,11 @@ exports.compileCPPWithInput = function ( envData , code , input ,  fn )
 										}
 									}
 								});
-								if(envData.options.timeout && !finished)
-								{
-									setTimeout(function (){
-										exec("taskkill /im "+filename+".exe /f > nul",function( error , stdout , stderr )
-										{
 
-										
-											if(!finished)
-											{
-												// var out = { error : 'Time Limit exceed ' + (envData.options.timeout +1)/1000 };
-												var out = { error : 'NZEC'};
-												finished = true;
-												fn(out);
-											}
-										
-										});
-									},envData.options.timeout);
-								}
 							}
 						}
 					});
-				}
+				
 			}
 				
 		}

@@ -30,7 +30,7 @@ export class RegistrationComponent implements OnInit {
   registerUser(user: User) {
     user.first_name = user.first_name.trim();
     user.last_name = user.last_name.trim();
-    user.user_name = user.user_name.toLowerCase().trim();
+    user.user_name = user.user_name.trim();
     user.email_id = user.email_id.toLowerCase();
     console.log(user);
     // Check password and confirm password

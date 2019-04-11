@@ -16,6 +16,7 @@ export class ContestsComponent implements OnInit {
   public no_live;
   public no_past;
   public no_future;
+  public p = [0, 0, 0];
   constructor(private _dataService: DataService, private toastr: ToastrService,
     private route: ActivatedRoute, private router: Router) { }
 

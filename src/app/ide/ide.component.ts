@@ -22,6 +22,7 @@ export class IdeComponent implements OnInit {
   public editor;
   public theme = 'ace/theme/clouds';
   public buf;
+  public buttonStatus = false;
 
 
   constructor(private _dataService: DataService, private toastr: ToastrService,
@@ -61,9 +62,8 @@ export class IdeComponent implements OnInit {
     this.editor.setTheme(this.theme);
   }
   onRunCode() {
+    this.buttonStatus = true;
 
-    console.log(this.output);
-    // this.code = document.getElementsByClassName('ace_content')[0].textContent;
     this.code = this.editor.getValue();
     const data = {
       code: this.code,
@@ -73,8 +73,10 @@ export class IdeComponent implements OnInit {
     };
     this._dataService.compileCode(data).subscribe(
       status => {
+        console.log(status);
         this.output = status.output;
         this.error = status.error;
+        this.buttonStatus = false;
       }
     );
   }

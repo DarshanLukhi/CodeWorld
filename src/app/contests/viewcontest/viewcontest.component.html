@@ -22,9 +22,9 @@
                 <table class="table table-striped table-bordered table-condensed" cellspacing="0" width="100%">
                   <thead>
                       <tr>
-                          <th>Name</th>
+                          <th style="width:200px;">Name</th>
                           <th>Code</th>
-                          <th>Successful Submission</th>
+                          <th style="width:200px;">Successful Submission</th>
                           <th>Accuracy</th>
                       </tr>
                   </thead>
@@ -33,12 +33,27 @@
                      <tr *ngFor="let i of data" (click)="onProblemSelect(i)">
                           <td style="padding-top:14px;">{{i.problemName}}</td>
                           <td style="padding-top:14px;">{{i.problemCode}}</td>
-                          <td style="padding-top:2px;">{{i.startDateTime | date}}<br>{{i.startDateTime  | date:"HH:mm"}}</td>
-                          <td style="padding-top:2px;">{{i.endDateTime | date}}<br>{{i.endDateTime  | date:"HH:mm"}}</td>
+                          <td style="padding-top:2px;">{{i.successfull}}</td>
+                          <td style="padding-top:2px;">
+                            <div *ngIf="i.successfull == 0 && i.total == 0; else elseblock">
+                                0 %
+                            </div>
+                            <ng-template #elseblock>
+                                {{ (i.successfull / i.total) *100 | number : '2.2-2'  }} %
+                            </ng-template>
+                            </td>
                       </tr> 
                     
                   </tbody>
               </table>
+              </div>
+              <div class="col-md-4">
+                  <a routerLink='/rankings/{{id}}' >
+                        <button class="btn btn-primary">
+                                View Ranking List
+                            </button>
+                  </a>
+                  
               </div>
           </div>
           

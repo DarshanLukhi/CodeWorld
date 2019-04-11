@@ -15,23 +15,50 @@ exports.compilePython = function (envData , code , fn){
 		if(exports.stats)
 		{
 			if(err)
-			console.log('ERROR: in pyModule'.red + err);
+				console.log('ERROR: in pyModule'.red + err);
 		
 
 		}
 		if(!err)
 		{
-			console.log(3);
+			
 			var command = 'python ' + path + filename +'.py';
-			exec( command , function ( error , stdout , stderr ){
-				console.log("ERROR".yellow + error);
-				console.log("STDERROR".yellow + stdout);
-				console.log("SRDERR".yellow + stderr);
+			var a = exec( command ,envData.options, function ( error , stdout , stderr ){
 				if(error)
 				{
-					if(error.toString().indexOf('RangeError [ERR_CHILD_PROCESS_STDIO_MAXBUFFER]: stdout maxBuffer length exceeded') != -1)
+					console.log(a);
+					if( a.signalCode == 'SIGINT' )
 					{
-						var out = { error : 'SIGCONT' };
+						var out = { error : 'ERROR CODE : TLE\nDetails : Time Limit Exceeded',output : stdout};
+						/*
+						exec("taskkill /im "+filename+".exe /f > nul",function( error , stdout , stderr )
+						{								
+							if(!finished)
+							{
+								finished = true;
+								fn(out);
+							}						
+						});	
+						*/
+						psTree(a.pid, function (err, children) {
+							children.forEach(p => {
+								exec('taskkill/pid '+p.PID+' /F',function( err , stdout , stderr ){
+									if(err)
+										console.log("kill Error".red+error);	
+								});
+							});
+						});
+						if(!finished)
+						{
+
+							finished = true;
+							fn(out);
+						}
+					}
+					else if(error.toString().indexOf('stdout maxBuffer length exceeded') != -1)
+					{
+		
+						var out = { error : 'ERROR CODE : SIGTSTP\nMaximum Buffer Size Exceeded' };
 						if(!finished)
 						{
 							finished = true;
@@ -39,13 +66,12 @@ exports.compilePython = function (envData , code , fn){
 						}
 					}
 
-					else {
+					else 
+					{
 						if(exports.stats)
 						{
 							console.log('INFO: '.green + filename + '.py contained an error while executing');
 						}
-						console.log("STDERROR".red + stderr);
-						console.log("ERROR".red + error);
 						
 						if(stderr) 
 						{
@@ -59,7 +85,8 @@ exports.compilePython = function (envData , code , fn){
 								fn(out);
 							}
 						}
-					}													
+					
+					}
 				}
 				else
 				{
@@ -75,24 +102,7 @@ exports.compilePython = function (envData , code , fn){
 					}
 				}			
 		    });
-			if(envData.options.timeout && !finished)
-			{
-				setTimeout(function (){
-					exec("taskkill /im "+filename+".exe /f > nul",function( error , stdout , stderr )
-					{
 
-					
-						if(!finished)
-						{
-							// var out = { error : 'Time Limit exceed ' + (envData.options.timeout +1)/1000 };
-							var out = { error : 'NZEC'};
-							finished = true;
-							fn(out);
-						}
-					
-					});
-				},envData.options.timeout);
-			}
 		
 	}});
 }
@@ -125,21 +135,40 @@ exports.compilePythonWithInput = function( envData , code , input ,  fn){
 				if(!err)
 				{
 					var command = 'python ' + path + filename +'.py < ' + path + filename +'input.txt ' ;
-					exec( command , function ( error , stdout , stderr ){
+					var a = exec( command ,envData.options, function ( error , stdout , stderr ){
 						if(error)
 						{
-							/*if(error.toString().indexOf('RangeError [ERR_CHILD_PROCESS_STDIO_MAXBUFFER]: stdout maxBuffer length exceeded') != -1)
+							if(a.signalCode == 'SIGINT')
 							{
-								var out = { error : 'Error: stdout maxBuffer exceeded. You might have initialized an infinite loop.' };
+								var out = { error : 'ERROR CODE : TLE\nDetails : Time Limit Exceeded',output : stdout};
+								/*
+								exec("taskkill /im "+filename+".exe /f > nul",function( error , stdout , stderr )
+								{								
+									if(!finished)
+									{
+										finished = true;
+										fn(out);
+									}						
+								});	*/
+								psTree(a.pid, function (err, children) {
+									children.forEach(p => {
+										exec('taskkill/pid '+p.PID+' /F',function( err , stdout , stderr ){
+											if(err)
+												console.log("kill Error".red+error);	
+										});
+									});
+								});
 								if(!finished)
 								{
+
 									finished = true;
 									fn(out);
 								}
-							}*/
-							if(error.toString().indexOf('Error: Command failed') != -1)
+							}
+							else if(error.toString().indexOf('stdout maxBuffer length exceeded') != -1)
 							{
-								var out = { error : 'NZEC' };
+				
+								var out = { error : 'ERROR CODE : SIGTSTP\nMaximum Buffer Size Exceeded' };
 								if(!finished)
 								{
 									finished = true;
@@ -152,8 +181,7 @@ exports.compilePythonWithInput = function( envData , code , input ,  fn){
 								{
 									console.log('INFO: '.green + filename + '.py contained an error while executing');
 								}
-								console.log("STDERROR".red + stderr);
-								console.log("ERROR".red + error);
+	
 								
 								if(stderr) 
 								{
@@ -185,29 +213,7 @@ exports.compilePythonWithInput = function( envData , code , input ,  fn){
 				    });						
 				}
 			});
-			if(envData.options.timeout && !finished)
-			{
-				console.log(123);
-				// kill the programme after envData.options.timeout ms
-				setTimeout(function (){
-					exec("taskkill /im "+filename+".exe /f > nul",function( error , stdout , stderr )
-					{
-						if(!finished)
-						{
-						console.log("STDERROR".red + stderr);
-						console.log("ERROR".red + error);
-						console.log("STDOUT".red + stdout);						
-						if(!finished)
-						{
-							// var out = { error : 'Time Limit exceed ' + (envData.options.timeout +1)/1000 };
-							var out = { error : 'NZEC'};
-							finished = true;
-							fn(out);
-						}
-					}
-				});
-				},envData.options.timeout);
-			}
+			
 		}
 	});
 }

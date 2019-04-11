@@ -1,5 +1,5 @@
-  <!-- Navigation -->
-  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -8,13 +8,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">CODE WORLD</a>
+        <a class="navbar-brand" href="">CODE WORLD</a>
     </div>
     <!-- Top Menu Items -->
     <ul class="nav navbar-right top-nav">
 
-<!--                       Header Message                        -->
-        <li class="dropdown">
+        <!--                       Header Message                        -->
+        <!-- <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
             <ul class="dropdown-menu message-dropdown">
                 <li class="message-preview">
@@ -37,11 +37,11 @@
                     <a href="#">Read All New Messages</a>
                 </li>
             </ul>
-        </li>
+        </li> -->
 
 
-<!--                       Header Notofication                        -->
-        <li class="dropdown">
+        <!--                       Header Notofication                        -->
+        <!-- <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
             <ul class="dropdown-menu alert-dropdown">
                 <li>
@@ -67,86 +67,85 @@
                     <a href="#">View All</a>
                 </li>
             </ul>
-        </li>
+        </li> -->
 
-<!--                       Header Profile      -->
-    
+        <!--                       Header Profile      -->
+
         <li class="dropdown" *ngIf="login">
-            <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user">{{first_name}} {{last_name}}</i> <b class="caret"></b> </a>
+            <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"> &nbsp; {{first_name}} {{last_name}}
+                    &nbsp;</i> <b class="caret"></b> </a>
             <ul class="dropdown-menu">
                 <li>
-                    <a [routerLink]="['/profile']"><i class="fa fa-fw fa-user"></i> Profile</a>
+                    <a [routerLink]="['/profile',userDetails.user_name]"><i class="fa fa-fw fa-user"></i> Profile</a>
                 </li>
                 <li>
                     <a [routerLink]="['/edit-profile']"><i class="fa fa-fw fa-user"></i>Edit Profile</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/my-question']"><i class="fa fa-question-circle"></i>My Questions</a>
+                    <a [routerLink]="['/my-question']"><i class="fa fa-question-circle"> &nbsp;</i>My Questions</a>
                 </li>
                 <li>
-                    <a [routerLink]="['/my-answer']"><i class="fa fa-comment-o"></i>My Answers</a>
+                    <a [routerLink]="['/my-answer']"><i class="fa fa-comment-o"> &nbsp; </i>My Answers</a>
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a (click)="onLogout()"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    <a (click)="onLogout()"><i class="fa fa-fw fa-power-off"> </i> Log Out</a>
                 </li>
             </ul>
         </li>
-       <li class="dropdown" *ngIf="notLogin">
-           <a [routerLink]="['/login']"><i class="fa fa-sign-in"></i> Login</a>
+        <li class="dropdown" *ngIf="notLogin">
+            <a [routerLink]="['/login']"><i class="fa fa-sign-in"></i> Login</a>
         </li>
         <li class="dropdown" *ngIf="notLogin">
             <a [routerLink]="['/registration']"><i class="glyphicon glyphicon-user"></i>Sign Up </a>
         </li>
 
     </ul>
-   
+
 
 
 
     <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-    
+
     <div class="collapse navbar-collapse navbar-ex1-collapse">
-      <div *ngIf="user" >
+        <div *ngIf="user">
 
 
             <ul class="nav navbar-nav side-nav">
-          
-                    <li class="active">
-                        <a [routerLink]="['/contests']"><i class="fa fa-fw fa-dashboard"></i> Contests</a>
-                    </li>
-                    
-                    <li>
-                        <a [routerLink]="['/practice']"><i class="fa fa-fw fa-table"></i> Practise</a>
-                    </li>
-                    <li>
-                        <a [routerLink]="['/discuss']"><i class="fa fa-fw fa-comments"></i> Discuss </a>
-                    </li>
-                   
-                </ul>
+
+                <li class="active contests contest">
+                    <a [routerLink]="['/contests']"><i class="fa fa-fw fa-dashboard"></i> Contests</a>
+                </li>
+
+                <li class="practice">
+                    <a [routerLink]="['/practice']"><i class="fa fa-fw fa-table"></i> Practice</a>
+                </li>
+                <li class="discuss">
+                    <a [routerLink]="['/discuss']"><i class="fa fa-fw fa-comments"></i> Discuss </a>
+                </li>
+                <li class="ide">
+                    <a [routerLink]="['/ide']"><i class="fa fa-fw fa-file-code-o"></i> IDE </a>
+                </li>
+            </ul>
         </div>
-        <div *ngIf="admin" >
+        
+        <div *ngIf="admin">
 
             <ul class="nav navbar-nav side-nav">
-                
-                    <li class="active">
-                        <a [routerLink]="['/admin/problems']"><i class="fa fa-fw fa-dashboard"></i>  Manage Problem</a>
-                    </li>
-                    
-    
-                    <li>
-                        <a [routerLink]="['/admin/contests']"><i class="fa fa-fw fa-bar-chart-o"></i> Manage Contest</a>
-                    </li>
-    
-                    <li>
-                        <a [routerLink]="['/admin/crud']"><i class="fa fa-fw fa-edit"></i> Manage User</a>
-                    </li>           
-                    <li>
-                        <a [routerLink]="['/discuss']"><i class="fa fa-fw fa-edit"></i> Manage Discuss</a>
-                    </li>               
-                </ul>   
-            </div>
+
+                <li class="active problems problem">
+                    <a [routerLink]="['/admin/problems']"><i class="fa fa-fw fa-dashboard"></i> Manage Problem</a>
+                </li>
+
+                <li class="contests  contest">
+                    <a [routerLink]="['/admin/contests']"><i class="fa fa-fw fa-bar-chart-o"></i> Manage Contest</a>
+                </li>
+
+                <li class="discuss">
+                    <a [routerLink]="['/discuss']"><i class="fa fa-fw fa-edit"></i> Manage Discuss</a>
+                </li>
+            </ul>
         </div>
+    </div>
     <!-- /.navbar-collapse -->
 </nav>
-

@@ -19,6 +19,9 @@ let Solution = new Schema({
   },
   language: {
     type: String,
+  },
+  location: {
+    type: String,
   }
 })
 

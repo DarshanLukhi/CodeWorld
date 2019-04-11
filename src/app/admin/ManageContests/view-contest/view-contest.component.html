@@ -69,6 +69,11 @@
                             <option value="End">End</option>
                           </select>
                       </div>
+                      <div *ngIf='data.contestStatus == "End"'>
+                        <select class="form-control"  id="option">
+                          <option value="End">End</option>
+                        </select>
+                        </div>
                     
                   </td>
                 </tr>

@@ -65,7 +65,7 @@
                                       <h4>
                                           <a routerLink='/discuss/answer/{{ i._id }}' target="_blank" innerHTML="{{ i.question | highlight : query}}"> </a>
                                       </h4>
-                                      <p> Question posted by <i><mark>{{ i.userId }}</mark></i>  on {{ i.timeStamp | date:'medium' }} </p>
+                                      <p> Question posted by <i><mark> <a routerLink='/profile/{{ i.userId }}' target="_blank" >{{ i.userId }}</a></mark></i>  on {{ i.timeStamp | date:'medium' }} </p>
                                       <div class="breadcrumb">
                                           <i class="fa fa-comment-o" ></i> {{ i.ansCount }} Answers
                                           <i class="fa fa-eye" ></i> {{ i.viewCount }}  Views

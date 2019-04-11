@@ -2,74 +2,103 @@
     <app-header></app-header>
     <div id="page-wrapper">
         <div class="container-fluid">
+
+
             <!--   page heading   -->
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">
                         Discuss <small>Answer Section</small>
                     </h1>
-                    
                     <ol class="breadcrumb">
                         <li class="active">
                             <i class="fa fa-comments" ></i> QNA/answers
                         </li>
                     </ol>
-                    
                 </div>
             </div>
 
-            <div class="row">
-                <!--  Question  Answer  -->
-              
-                    <div class="col-md-8 col-sm-8 col-xs-9">
-                        <h4>  <label> Question : </label> {{ ques.question }}</h4>
-                        <p>( Question posted by <i><mark>{{ ques.userId }}</mark></i>  on {{ ques.timeStamp | date: 'medium' }} )</p>
-                        <hr>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="col-lg-6 col-sm-6 col-xs-12">
-                                    <h4><label> Answers : </label></h4>
-                                </div>
-                                <div class="col-lg-6 col-sm-6 col-xs-12 pull-right">
-                                    <button class="browse btn btn-warning pull-right" type="submit" (click)="addAnswerButton()" > + Add Answer</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div *ngIf="( answers ) ?.length==0">
-                            <p class="text-danger"> Sorry! No Answers available at the moment. </p>
-                        </div>  
-                        <div>
-                            <table>
-                                <tr  *ngFor = "let i of answers | paginate: { itemsPerPage: 4, currentPage: p }"  >
-                                    <td>
-                                        <div class="well active">
-                                            <button *ngIf="admin" class="browse btn btn-danger pull-right" type="submit" (click)="deleteAnswer($event, i._id, ques._id)"> <i class="fa fa-trash" ></i> </button>
-                                            <h4> {{ i.answer }}  </h4>
-                                            
-                                            <p> ( Answer provided by <i><mark>{{ i.userId }}</mark></i>  on {{ i.timeStamp | date: 'medium' }} ) </p>
-                                            <div class="breadcrumb">
-                                                <button class="browse btn btn-secondary" type="submit" (click)="addLike($event, i._id)" >
-                                                    <i class="fa fa-thumbs-o-up" ></i> like <br> {{ i.likeCount }}
-                                                </button> 
-                                                <button class="browse btn btn-secondary" type="submit" (click)="addDislike($event, i._id)" >
-                                                    <i class="fa fa-thumbs-o-down" ></i> dislike <br> {{ i.dislikeCount }} 
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div><br></div>
-                                    </td>
-                                </tr>
-                            </table>
-                            <div class="text-center">
-                                <pagination-controls (pageChange)="p = $event"></pagination-controls>
-                            </div>
-                        </div>
-                        
-                </div>
 
-                <div class="col-md-8 col-sm-8 col-xs-9">
-                    <!--  Post Answer  -->
+            <!--  Question  -->
+            <div class="row">
+                <div class="col-md-8">
+                    <h4>  <label> Question : </label> {{ ques.question }}</h4>
+                    <p>( Question posted by <a routerLink='/profile/{{ ques.userId }}' target="_blank"><i><mark>{{ ques.userId }}</mark></i></a>  on {{ ques.timeStamp | date: 'medium' }} )</p>
+                    <hr>
+                </div>
+            </div>
+
+
+            <!-- answer header -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="col-xs-3">
+                        <h4><label> Answers: </label></h4>
+                    </div>
+                    <div class="col-xs-3 pull-right">
+                        <button class="browse btn btn-warning pull-right"  type="submit" (click)="addAnswerButton()" > + Add Answer</button>
+                    </div>
+                </div>
+            </div>
+            
+
+            <!-- Answer -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div *ngIf="( mergedData ) ?.length==0">
+                        <p class="text-danger"> Sorry! No Answers available at the moment. </p>
+                    </div>  
+                    <div>
+                        <table>
+                            <tr  *ngFor = "let i of mergedData | paginate: { itemsPerPage: 4, currentPage: p }"  >
+                                <td>
+                                    <div class="well ">
+                                        <button *ngIf="admin" class="browse btn btn-danger pull-right" type="submit" (click)="deleteAnswer($event, i.answerId, ques._id)"> <i class="fa fa-trash" ></i> </button>
+                                        <h4> {{ i.answer }}  </h4>
+                                        
+                                        <p> ( Answer provided by <a routerLink='/profile/{{ i.userId }}' target="_blank"><i><mark>{{ i.userId }}</mark></i></a>  on {{ i.timeStamp | date: 'medium' }} ) </p>
+                                        <div class="breadcrumb" *ngIf="(i.like || i.dislike) ; else notgiven">
+                                            <div *ngIf="i.like ; else disliked">
+                                                <button class="browse btn btn-info" type="submit" (click)="addLike($event, i._id)" disabled>
+                                                    <i class="fa fa-thumbs-o-up" > </i> <b> {{ i.likeCount }} </b>
+                                                </button> 
+                                                <button class="browse btn btn-secondary" type="submit" (click)="addDislike($event, i._id)" disabled>
+                                                    <i class="fa fa-thumbs-o-down" > </i> <b> {{ i.dislikeCount }} </b>
+                                                </button> 
+                                            </div>
+                                            <ng-template #disliked>
+                                                <button class="browse btn btn-secondary" type="submit" (click)="addLike($event, i._id)" disabled>
+                                                    <i class="fa fa-thumbs-o-up" > </i> <b>  {{ i.likeCount }} </b>
+                                                </button> 
+                                                <button class="browse btn btn-info" type="submit" (click)="addDislike($event, i._id)" disabled>
+                                                    <i class="fa fa-thumbs-o-down" > </i> <b>  {{ i.dislikeCount }} </b>
+                                                </button>
+                                            </ng-template>
+                                        </div>
+                                        <ng-template #notgiven>
+                                            <button class="browse btn btn-secondary" type="submit" (click)="addLike($event, i._id)"  >
+                                                <i class="fa fa-thumbs-o-up" > </i> <b> {{ i.likeCount }} </b>
+                                            </button> 
+                                            <button class="browse btn btn-secondary" type="submit" (click)="addDislike($event, i._id)"  >
+                                                <i class="fa fa-thumbs-o-down" > </i> <b> {{ i.dislikeCount }} </b>
+                                            </button>
+                                        </ng-template>
+                                    </div>
+                                    <div><br></div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="text-center">
+                            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--  Post Answer  -->
+            <div class="row">
+                <div class="col-md-8">
                     <form role="form" #data2="ngForm" (ngSubmit)="onPostAnswer()" novalidate>
                         <div class="form-group">
                             <h4><label> Your Answer : </label></h4>
@@ -84,6 +113,8 @@
                     </form>
                 </div>
             </div>
+
+            
         </div>
     </div>
 </div>

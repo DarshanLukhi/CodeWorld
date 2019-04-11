@@ -46,51 +46,13 @@
                                         <option value="ace/theme/cobalt">Cobalt</option>
                                     </select>
                                 </div>
-                                <div class="col-md-2">
-                                        <button class="btn btn-default">
-                                                <i class="fa fa-download" aria-hidden="true"></i>
-                                        </button>
-                                        &nbsp; &nbsp; 
-                                        <button class="btn btn-default">
-                                                <i class="fa fa-upload" aria-hidden="true"></i>
-                                        </button>
-
-                                </div>
                                 <div class="col-md-4">
                                         
                                 </div>
-                                <div class="col-md-1">
-                                    <button class="btn btn-default pull-right" id="toggle">
-                                            <i class="fa fa-plus" aria-hidden="true"></i>  input
-                                    </button>
-                                     &nbsp; 
-                                </div>
-                                <div class="col-md-1"><button class="btn btn-success pull-right"  [disabled]="buttonStatus" (click)="onRunCode()">
-                                    
-                                    <span class="fa fa-cog">&nbsp;</span>
-                                    RUN</button></div>
+
                                 
                             </div>
                         </div>
-                        <div class="panel-body" id="input" style="display:none;padding: 13px 15px 0px 15px;">
-                                <label >INPUT</label>
-                                <div class="form-group">
-                                    <textarea  rows="5" class="form-control" [(ngModel)]="input"></textarea>
-                                </div>
-                        </div>
-                        
-                        <div class="panel-body" *ngIf="output "  style="padding: 13px 15px 0px 15px;">
-                            <label >OUTPUT</label>
-                            <div class="form-group">
-                                <textarea  rows="5" class="form-control" [(ngModel)]="output" disabled></textarea>
-                            </div>
-                         </div>
-                         <div class="panel-body" *ngIf="error " style="padding: 13px 15px 0px 15px;">
-                            <label >ERROR</label>
-                            <div class="form-group">
-                                <textarea  rows="5" class="form-control" [(ngModel)]="error" disabled></textarea>
-                            </div>
-                         </div>
                         <div class="panel-body">
                             <label>CODE</label>
                                 <pre id="editor" style="font-size:16px;height:500px;"></pre>        
