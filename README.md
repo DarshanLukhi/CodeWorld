@@ -1,6 +1,23 @@
+
 # CodeWorld
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.2.
+Code World is a web application which is developed with the purpose of learning of  programming language and increase logic by hard problems. With this web application any developer  or programmer can participate in contest or they can solve practice example. Users can also ask question worldwide if they have any doubt. And also, can give answer to another user and help them.
+
+## Feature
+* Login and Register
+* Online Compiler for C , C++, Java, Python 3.6.  
+* Automatic test case checking.  
+* Ranking feature based on the maximum solved problem.  
+* user can also view all last submission with status.  
+* View anyone profile and solution.  
+* Previous Contest Problem for practice.  
+* Question-answer forum
+* Contest Setting feature  
+* Practice problem in various category like Easy, Medium, Hard, 	   Challenge etc
+
+for more detail see our [Documentation of  CodeWorld](https://github.com/DarshanLukhi/CodeWorld/blob/master/CodingCompetitionSystem.pdf)
+
+
 
 ## Development server
 
